@@ -1,0 +1,254 @@
+.bouquet-canvas-viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  user-select: none;
+  touch-action: none;
+  background-color: transparent;
+}
+
+.canvas-shadow-ground {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 38%;
+  background: radial-gradient(ellipse 70% 35% at 50% 88%, rgba(26, 22, 18, 0.5) 0%, rgba(7, 6, 5, 0) 85%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.canvas-empty-overlay {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.75;
+}
+
+.canvas-empty-brand {
+  font-family: var(--font-cinzel), var(--font-serif);
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  color: var(--accent);
+  opacity: 0.7;
+}
+
+.canvas-empty-heading {
+  font-family: var(--font-cinzel), var(--font-serif);
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--text-secondary);
+}
+
+.canvas-empty-sub {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+}
+
+.botanical-layers-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.botanical-layer {
+  position: absolute;
+  cursor: grab;
+  pointer-events: auto;
+  touch-action: none;
+  will-change: transform;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 190px;
+}
+
+.botanical-layer:active {
+  cursor: grabbing;
+}
+
+.botanical-img-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  pointer-events: none;
+}
+
+.botanical-stem-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.45));
+  pointer-events: none;
+  transition: filter 0.15s ease-out;
+}
+
+.botanical-layer:hover .botanical-stem-img {
+  filter: drop-shadow(0 0 14px rgba(215, 199, 176, 0.4)) drop-shadow(0 8px 18px rgba(0, 0, 0, 0.5));
+}
+
+.botanical-layer.selected .botanical-stem-img {
+  filter: drop-shadow(0 0 18px rgba(215, 199, 176, 0.65)) drop-shadow(0 10px 22px rgba(0, 0, 0, 0.6));
+}
+
+/* Selection Frame & Handles */
+.selection-frame {
+  position: absolute;
+  inset: -4px;
+  border: 1px dashed rgba(215, 199, 176, 0.7);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.transform-handle {
+  position: absolute;
+  pointer-events: auto;
+}
+
+.rotate-handle {
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: grab;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.handle-connector {
+  width: 1px;
+  height: 12px;
+  background-color: rgba(215, 199, 176, 0.65);
+}
+
+.rotate-knob {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background-color: var(--cream);
+  border: 2px solid #070605;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+  cursor: grab;
+}
+
+.rotate-knob:hover {
+  transform: scale(1.2);
+  background-color: #FFF;
+}
+
+.scale-handle {
+  bottom: -6px;
+  right: -6px;
+  cursor: nwse-resize;
+}
+
+.scale-knob {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background-color: var(--cream);
+  border: 1px solid #070605;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+}
+
+.scale-knob:hover {
+  transform: scale(1.2);
+  background-color: #FFF;
+}
+
+/* Micro-Toolbar */
+.layer-micro-toolbar {
+  position: absolute;
+  top: -46px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: rgba(14, 13, 11, 0.94);
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  padding: 3px 6px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.7);
+  z-index: 100;
+  pointer-events: auto;
+  backdrop-filter: blur(6px);
+  white-space: nowrap;
+}
+
+.micro-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  padding: 4px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.micro-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+
+.micro-btn.delete-btn:hover {
+  background-color: rgba(220, 50, 50, 0.35);
+  color: #FF8888;
+}
+
+/* Vessel / Upright Vase & Florist Wrap Stage */
+.canvas-vessel-stage {
+  position: absolute;
+  bottom: 4%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 250px;
+  max-width: 52%;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 18;
+}
+
+.canvas-vessel-img {
+  width: 100%;
+  height: auto;
+  max-height: 48vh;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.88));
+}
+
+/* Subtle canvas instruction hint */
+.canvas-live-hint {
+  position: absolute;
+  bottom: 14px;
+  left: 20px;
+  right: 20px;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 8.5px;
+  letter-spacing: 0.16em;
+  color: var(--text-subtle);
+  pointer-events: none;
+  z-index: 25;
+  opacity: 0.8;
+}

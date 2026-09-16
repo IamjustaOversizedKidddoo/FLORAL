@@ -1,0 +1,92 @@
+.flower-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 5px 7px 5px;
+  cursor: pointer;
+  position: relative;
+  transition: all var(--transition-fast);
+  user-select: none;
+  overflow: hidden;
+}
+
+.flower-card:hover {
+  border-color: var(--border-active);
+  transform: translateY(-2px);
+  background-color: var(--surface-hover);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.flower-card:active {
+  transform: translateY(0);
+}
+
+.flower-card.selected {
+  border-color: var(--accent);
+}
+
+.flower-card-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 0.94;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: #0B0A09;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flower-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-smooth);
+}
+
+.flower-card:hover .flower-card-img {
+  transform: scale(1.04);
+}
+
+.flower-add-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(18, 16, 14, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  backdrop-filter: blur(4px);
+  z-index: 2;
+}
+
+.flower-card:hover .flower-add-btn {
+  background: rgba(30, 26, 22, 0.9);
+  border-color: var(--accent);
+  color: var(--cream);
+  transform: scale(1.08);
+}
+
+.flower-card-label {
+  margin-top: 6px;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: #C0B9AE;
+  text-transform: uppercase;
+}
+
+.flower-card:hover .flower-card-label {
+  color: var(--text);
+}
