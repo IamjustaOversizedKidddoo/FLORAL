@@ -1,0 +1,90 @@
+/* ============================================================
+   TYPOGRAPHY — Canonical text styles & optical alignment
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   TIMER HERO DIGITS
+   ---------------------------------------------------------- */
+.timer-digits {
+  font-family: var(--font-timer);
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-size: var(--timer-font-size);
+  font-weight: var(--timer-font-weight);
+  line-height: var(--timer-line-height);
+  letter-spacing: var(--timer-letter-spacing);
+
+  /* Tabular figures: prevents jitter between number transitions */
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+
+  color: var(--text-hero);
+  user-select: none;
+  -webkit-user-select: none;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+/* Optical balance for the colon separator */
+.timer-colon {
+  display: inline-block;
+  vertical-align: baseline;
+  /* Slight optical lift so colon centers with digit x-height */
+  transform: translateY(-0.06em);
+  padding: 0 0.04em;
+  opacity: 0.85;
+  font-weight: 300;
+  user-select: none;
+}
+
+/* Digit group (hours, minutes, seconds) */
+.digit-group {
+  display: inline-block;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+}
+
+/* ----------------------------------------------------------
+   MODE BADGE / HEADER
+   ---------------------------------------------------------- */
+.mode-badge {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  user-select: none;
+}
+
+/* ----------------------------------------------------------
+   BODY TEXT UTILITIES
+   ---------------------------------------------------------- */
+.text-2xs { font-size: var(--text-2xs); }
+.text-xs { font-size: var(--text-xs); }
+.text-sm { font-size: var(--text-sm); }
+.text-base { font-size: var(--text-base); }
+.text-md { font-size: var(--text-md); }
+.text-lg { font-size: var(--text-lg); }
+
+.text-hero { color: var(--text-hero); }
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+
+.font-light { font-weight: 300; }
+.font-normal { font-weight: 400; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+
+.tracking-wide { letter-spacing: 0.06em; }
+.tracking-wider { letter-spacing: 0.12em; }
+.tracking-widest { letter-spacing: 0.2em; }
+
+.uppercase { text-transform: uppercase; }
+.tabular-nums {
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+}

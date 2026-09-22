@@ -1,90 +1,72 @@
-# FLORÆ (フローラ)
-> *A Language Without Words • 花を作る • Est. 2025*
+# Chronos Focus — Cinematic Obsidian Focus Timer
 
-**FLORÆ** is a luxury digital botanical atelier and emotional gift composer. Visitors can hand-arrange bespoke floral bouquets in authentic handcrafted vessels or artisanal florist wraps, compose handwritten letters on tactile luxury stationery, and send cinematic, unauthenticated gift links to loved ones.
+An ultra-refined, distraction-free Pomodoro & deep-work focus timer built with React, TypeScript, and Vite. Engineered around a singular conviction: **The timer is the hero of the universe.**
 
 ---
 
 ## ✨ Features
 
-- **Interactive Botanical Atelier**:
-  - Silky-smooth 60–120 FPS direct DOM drag, rotate, and scale.
-  - Mathematical organic dome silhouette preventing stray or floating stems.
-  - Multi-tiered depth sorting (`bringForward`, `sendBackward`, `duplicate`).
-- **Authentic Vessels & Packaging Wraps**:
-  - **4 Handcrafted Vessels**: Dark Fluted Charcoal Stoneware, Smoky Fluted Mouth-Blown Glass, Imperial Celadon Porcelain, Minimalist Raw Sand Stoneware.
-  - **4 Florist Packaging Cones**: Natural Kraft Paper, Ivory Deckled Washi, Charcoal French Linen, Vintage Botanical Print Paper.
-- **Pure Alpha Transparency Botanicals**:
-  - Zero black halos or circular vignette masks.
-  - Classic European & Japanese varieties (Rose, Tulip, Lily, Orchid, Peony, Hydrangea, Sunflower, Jasmine).
-  - **Rare Botanical Sanctuaries**: Epiphytic Ghost Orchid, Turquoise Jade Vine, Middlemist's Red Camellia, and Midnight Kadupul.
-- **Physical Luxury Stationery**:
-  - 5 tactile paper textures (Aged Parchment, Handmade Deckle, Minimal Warm White, Botanical Press, Midnight Charcoal).
-  - Typography curation (Cormorant Garamond, Pinyon Script, Cinzel, Montserrat, Courier Prime).
-  - Authentic wax seal monogram.
-- **Cinematic Recipient Experience**:
-  - **Zero Account Required**: Recipients open gifts with a single tap.
-  - **Stage 1**: Elegant private teaser envelope with the gold FLORÆ monogram seal.
-  - **Stage 2**: Living bouquet blooming into life with staggered floral physics, accompanied by the personal letter and interactive meaning cards.
+- **Centred Obsidian Canvas**: Mathematical 3-row grid with fluid viewport centering and pure typography.
+- **Wide Tabular Typography**: High-contrast, wide-proportioned numerals powered by Space Grotesk with extended geometric styling.
+- **Ambient Quotes Widget**: Top-right corner mindset inspiration layer with 7-second automatic cycle and click-to-skip.
+- **Drift-Proof Monotonic Engine**: High-resolution performance timer with resilient web worker background execution.
+- **Synthesized Audio Architecture**: Zero-latency Web Audio API soundscapes (pure bell strikes, acoustic clicks, ambient completion cues).
+- **Productivity Intelligence**: Session tracking, completion metrics, streaks, and analytics modal.
+- **Keyboard-First Velocity**: Full keyboard accessibility (`Space` to toggle, `R` to reset, `S` to skip, `,` for settings, `F` for fullscreen).
+- **Screen Wake Lock & Idle Atmosphere**: Prevents display sleep during active focus sessions with cinematic background breathing.
 
 ---
 
 ## 🚀 Quick Start
 
-### Local Development
-
+### 1. Install Dependencies
 ```bash
-# Install dependencies
 npm install
+```
 
-# Start development server
+### 2. Development Server
+```bash
 npm run dev
 ```
-Open [http://localhost:5174](http://localhost:5174) in your browser.
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-### Production Build
-
+### 3. Production Build
 ```bash
-# TypeScript compilation & Vite bundle
 npm run build
+```
 
-# Preview production build locally
-npm run preview
-
-# Or run the production Node.js server
-npm run start
+### 4. Run Tests
+```bash
+npm test
 ```
 
 ---
 
-## 🌐 Deploying to Vercel
+## ⌨️ Keyboard Shortcuts
 
-1. **Push to GitHub**:
-   Ensure code is pushed to your GitHub repository:
-   ```bash
-   git push -u origin main
-   ```
-2. **Import to Vercel**:
-   - Go to [vercel.com/new](https://vercel.com/new)
-   - Select the `FLORAL` repository.
-   - Framework Preset: **Vite**
-   - Root Directory: `./`
-   - Build Command: `npm run build`
-   - Output Directory: `dist`
-3. **Click Deploy**:
-   Vercel will build the frontend and deploy the serverless `/api/gifts` endpoints automatically using `vercel.json`.
+| Key | Action |
+| --- | --- |
+| `Space` | Start / Pause timer |
+| `R` | Reset session |
+| `S` | Skip session |
+| `,` | Open Settings |
+| `F` | Toggle Fullscreen |
+| `M` | Toggle Mute |
+| `Esc` | Close modal / overlay |
 
 ---
 
-## 🛠️ Technology Stack
+## 🛠 Tech Stack
 
-- **Core**: React 18, TypeScript 5, Vite 6
-- **Styling**: Vanilla CSS with tailored design tokens, glassmorphism, and responsive layouts
-- **Icons**: Lucide Icons & Custom SVG Monograms
-- **Deployment**: Vercel (SPA rewrites + Serverless API functions)
+- **Framework**: React 18 + TypeScript
+- **Bundler**: Vite 5
+- **Styling**: Vanilla CSS Modules (Design Tokens system)
+- **Audio**: Web Audio API (procedural synthesis)
+- **State**: Custom reactive hooks with local storage persistence
+- **Testing**: Vitest
 
 ---
 
-## 📜 License
+## 📄 License
 
-Private Atelier Edition • All Rights Reserved.
+MIT

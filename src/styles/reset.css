@@ -1,0 +1,81 @@
+/* ============================================================
+   RESET — Establish sane baseline before tokens
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  /* Prevent iOS font size adjustment on orientation change */
+  -webkit-text-size-adjust: 100%;
+  /* Enable subpixel font rendering on macOS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  /* Prevent layout shift from scrollbar appearance */
+  scrollbar-gutter: stable;
+}
+
+body {
+  line-height: 1.5;
+  font-family: var(--font-sans);
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  min-height: 100dvh;
+  overflow: hidden; /* Fullscreen app, no scroll */
+}
+
+#root {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Remove default button styles */
+button {
+  border: none;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Remove default list styles */
+ul, ol {
+  list-style: none;
+}
+
+/* Images don't overflow their containers */
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Focus outline — always accessible but visually refined */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+/* Selection color */
+::selection {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: var(--text-hero);
+}
+
+/* Prevent text selection during rapid clicking */
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+}

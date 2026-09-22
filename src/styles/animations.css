@@ -1,0 +1,154 @@
+/* ============================================================
+   ANIMATIONS — Named keyframes and motion utilities
+   
+   PRINCIPLE: Every animation must serve a purpose.
+   "What information does this motion communicate?"
+   If the answer is "none", it doesn't exist here.
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   REDUCED MOTION BASELINE
+   All animations are opt-in — we first kill everything
+   for prefers-reduced-motion users, then selectively restore
+   animations that are safe (simple opacity transitions).
+   ---------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ----------------------------------------------------------
+   COMPLETION PULSE
+   Purpose: Subtle visual confirmation that a session ended.
+   A single heartbeat scale — not decorative, communicates
+   the moment of completion.
+   ---------------------------------------------------------- */
+@keyframes completionPulse {
+  0%   { transform: scale(1); opacity: 1; }
+  40%  { transform: scale(1.018); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-completion-pulse {
+  animation: completionPulse 600ms var(--ease-spring) forwards;
+}
+
+/* ----------------------------------------------------------
+   FADE IN UP
+   Purpose: Elements entering the scene (modals, settings)
+   slide in from slightly below to convey depth/layering.
+   ---------------------------------------------------------- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp var(--duration-normal) var(--ease-spring) forwards;
+}
+
+/* ----------------------------------------------------------
+   FADE IN
+   Purpose: Overlays and backdrop fades.
+   ---------------------------------------------------------- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--duration-fast) var(--ease-linear) forwards;
+}
+
+/* ----------------------------------------------------------
+   MODE TRANSITION
+   Purpose: When switching between Focus / Break modes,
+   digits briefly dissolve so the user perceives a clean
+   cognitive context switch — not just a number change.
+   ---------------------------------------------------------- */
+@keyframes modeExit {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(-8px) scale(0.97); }
+}
+
+@keyframes modeEnter {
+  from { opacity: 0; transform: translateY(8px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.animate-mode-exit {
+  animation: modeExit var(--duration-fast) var(--ease-smooth) forwards;
+}
+
+.animate-mode-enter {
+  animation: modeEnter var(--duration-normal) var(--ease-spring) forwards;
+}
+
+/* ----------------------------------------------------------
+   IDLE CHROME FADE
+   Purpose: When the timer is running and the user is not
+   interacting, the chrome (header/footer/controls) fades
+   to leave only the timer visible — cinematic focus.
+   Implemented via CSS class toggling from JS.
+   ---------------------------------------------------------- */
+.chrome-idle-fade {
+  transition: opacity var(--duration-fade) var(--ease-linear);
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+.chrome-active {
+  transition: opacity var(--duration-fast) var(--ease-linear);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ----------------------------------------------------------
+   GLOW PULSE (Completion Ambient)
+   Purpose: On session completion, an ambient radial glow
+   expands and dissolves behind the digits, providing a
+   satisfying sensory reward without being garish.
+   ---------------------------------------------------------- */
+@keyframes glowPulse {
+  0%   { opacity: 0; transform: scale(0.8); }
+  30%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.4); }
+}
+
+.animate-glow-pulse {
+  animation: glowPulse 2.4s var(--ease-smooth) forwards;
+}
+
+/* ----------------------------------------------------------
+   SLIDE IN FROM RIGHT (Settings modal)
+   ---------------------------------------------------------- */
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.animate-slide-in-right {
+  animation: slideInRight var(--duration-normal) var(--ease-spring) forwards;
+}
+
+/* ----------------------------------------------------------
+   BUTTON TACTILE PRESS
+   Implemented via transform on :active, not keyframes,
+   for sub-16ms response. Class version for JS trigger.
+   ---------------------------------------------------------- */
+.btn-press-active {
+  transform: scale(0.96) !important;
+  transition: transform var(--duration-instant) var(--ease-spring) !important;
+}

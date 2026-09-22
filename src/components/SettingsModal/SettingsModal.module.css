@@ -1,0 +1,767 @@
+/* ==========================================================================
+   SETTINGS MODAL — Obsidian Architecture & Progressive Disclosure
+   Phase 8 Final Polish: Apple/Linear Precision Design System
+   ========================================================================== */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-overlay, 1000);
+  padding: 1.5rem;
+  animation: backdropEnter var(--duration-short) var(--ease-out-soft) forwards;
+}
+
+@keyframes backdropEnter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal {
+  background: #0d0d10;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 780px;
+  height: 600px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 32px 80px -12px rgba(0, 0, 0, 0.8),
+              0 0 0 1px rgba(255, 255, 255, 0.06);
+  position: relative;
+  animation: modalEnter var(--duration-medium) var(--ease-out-soft) forwards;
+  color: #ededed;
+  font-family: var(--font-sans, 'Inter', sans-serif);
+}
+
+@keyframes modalEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.975) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   HEADER
+   -------------------------------------------------------------------------- */
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.015);
+  flex-shrink: 0;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.modalTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: #ededed;
+  margin: 0;
+}
+
+.headerSub {
+  font-size: 0.75rem;
+  color: #71717a;
+  letter-spacing: 0.01em;
+}
+
+.closeBtn {
+  background: transparent;
+  border: none;
+  color: #71717a;
+  cursor: pointer;
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  transition: all var(--duration-micro) var(--ease-micro);
+}
+
+.closeBtn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.closeBtn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.4);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   TAB NAVIGATION (Horizontal Segmented Bar)
+   -------------------------------------------------------------------------- */
+.tabNav {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.65rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.2);
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-shrink: 0;
+}
+
+.tabNav::-webkit-scrollbar {
+  display: none;
+}
+
+.tabBtn {
+  background: transparent;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.775rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: #8e8e98;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--duration-micro) var(--ease-micro);
+}
+
+.tabBtn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tabBtn.activeTab {
+  color: #060608;
+  background: #ffffff;
+  font-weight: 600;
+}
+
+.tabBtn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   PANEL CONTENT
+   -------------------------------------------------------------------------- */
+.panelContent {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.75rem 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.tabPane {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  animation: tabPaneFade 0.2s var(--ease-out-soft) forwards;
+}
+
+@keyframes tabPaneFade {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.paneDescription {
+  font-size: 0.8125rem;
+  color: #8e8e98;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   GRID & FORM INPUTS
+   -------------------------------------------------------------------------- */
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #d8d8df;
+}
+
+.numberInput {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.875rem;
+  color: #ffffff;
+  font-family: inherit;
+  outline: none;
+  transition: all var(--duration-micro) var(--ease-micro);
+}
+
+.numberInput:focus {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.hint {
+  font-size: 0.725rem;
+  color: #63636e;
+}
+
+.selectInput {
+  background: #141418;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.85rem;
+  color: #ffffff;
+  font-family: inherit;
+  outline: none;
+  cursor: pointer;
+  width: 100%;
+  transition: all var(--duration-micro) var(--ease-micro);
+}
+
+.selectInput:focus {
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+/* --------------------------------------------------------------------------
+   ROW ITEMS & TOGGLE SWITCHES
+   -------------------------------------------------------------------------- */
+.rowItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.15rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  gap: 1.5rem;
+}
+
+.rowTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #ededed;
+  display: block;
+}
+
+.rowDesc {
+  font-size: 0.775rem;
+  color: #8e8e98;
+  line-height: 1.4;
+  display: block;
+  margin-top: 0.15rem;
+}
+
+/* Tactile iOS/Linear-style Toggle Switch */
+.toggleCheckbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 44px;
+  height: 24px;
+  background-color: rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  flex-shrink: 0;
+  transition: background-color var(--duration-short) var(--ease-out-soft);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.toggleCheckbox::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  transition: transform var(--duration-short) var(--ease-out-soft);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.toggleCheckbox:checked {
+  background-color: #ededed;
+}
+
+.toggleCheckbox:checked::after {
+  transform: translateX(20px);
+  background-color: #060608;
+}
+
+.toggleCheckbox:focus-visible {
+  box-shadow: 0 0 0 2px #0d0d10, 0 0 0 4px rgba(255, 255, 255, 0.4);
+}
+
+.toggleCheckbox:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* --------------------------------------------------------------------------
+   SLIDERS & SOUND SELECT
+   -------------------------------------------------------------------------- */
+.sliderSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem 1.15rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+}
+
+.sliderHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sliderVal {
+  font-size: 0.8125rem;
+  font-family: var(--font-mono, monospace);
+  color: #8e8e98;
+}
+
+.rangeInput {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  outline: none;
+  cursor: pointer;
+}
+
+.rangeInput::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  transition: transform var(--duration-micro) var(--ease-micro);
+}
+
+.rangeInput::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.soundSelectRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.soundSelectMeta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.previewBtn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #ededed;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--duration-micro) var(--ease-micro);
+}
+
+.previewBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.categoryResetRow {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.5rem;
+}
+
+.resetCategoryBtn {
+  background: transparent;
+  border: none;
+  font-size: 0.75rem;
+  color: #71717a;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--duration-micro) var(--ease-micro);
+}
+
+.resetCategoryBtn:hover {
+  color: #ededed;
+}
+
+/* --------------------------------------------------------------------------
+   NOTIFICATION PERMISSIONS
+   -------------------------------------------------------------------------- */
+.permissionCard {
+  padding: 1.15rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.permissionStatusRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.permissionLabel {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #ededed;
+}
+
+.permissionBadge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+}
+
+.permGranted {
+  background: rgba(52, 211, 153, 0.15);
+  color: #34d399;
+}
+
+.permDenied {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.permDefault {
+  background: rgba(255, 255, 255, 0.08);
+  color: #8e8e98;
+}
+
+.requestPermBtn {
+  background: #ffffff;
+  color: #060608;
+  border: none;
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  font-size: 0.825rem;
+  font-weight: 500;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: opacity var(--duration-micro) var(--ease-micro);
+}
+
+.requestPermBtn:hover {
+  opacity: 0.9;
+}
+
+.deniedNotice {
+  font-size: 0.775rem;
+  color: #ef4444;
+  line-height: 1.45;
+}
+
+.testNotificationRow {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* --------------------------------------------------------------------------
+   SHORTCUTS TABLE
+   -------------------------------------------------------------------------- */
+.shortcutsTable {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 0.5rem;
+}
+
+.shortcutRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  transition: background var(--duration-micro) var(--ease-micro);
+}
+
+.shortcutRow:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.shortcutKey {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ededed;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  min-width: 28px;
+  text-align: center;
+}
+
+.shortcutDesc {
+  font-size: 0.8125rem;
+  color: #8e8e98;
+}
+
+/* --------------------------------------------------------------------------
+   DATA & STORAGE CARDS
+   -------------------------------------------------------------------------- */
+.dataCard {
+  padding: 1.15rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.dataCardTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ededed;
+}
+
+.dataCardDesc {
+  font-size: 0.775rem;
+  color: #8e8e98;
+  line-height: 1.45;
+}
+
+.actionCard {
+  padding: 1.15rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.actionCardMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.outlineBtn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #ededed;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--duration-micro) var(--ease-micro);
+}
+
+.outlineBtn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.dangerCard {
+  border-color: rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.03);
+}
+
+.dangerTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ef4444;
+}
+
+.dangerBtn {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ef4444;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--duration-micro) var(--ease-micro);
+}
+
+.dangerBtn:hover {
+  background: rgba(239, 68, 68, 0.22);
+}
+
+/* --------------------------------------------------------------------------
+   CONFIRMATION MODAL OVERLAY
+   -------------------------------------------------------------------------- */
+.confirmOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  z-index: 1100;
+  animation: backdropEnter 0.15s ease forwards;
+}
+
+.confirmBox {
+  background: #141418;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 1.75rem;
+  max-width: 420px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
+}
+
+.confirmTitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+.confirmText {
+  font-size: 0.825rem;
+  color: #8e8e98;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.confirmBtns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.cancelBtn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 0.55rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #ededed;
+  cursor: pointer;
+  transition: all var(--duration-micro) var(--ease-micro);
+}
+
+.cancelBtn:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.dangerConfirmBtn {
+  background: #ef4444;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  transition: opacity var(--duration-micro) var(--ease-micro);
+}
+
+.dangerConfirmBtn:hover {
+  opacity: 0.9;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE DESIGN (320px to 768px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .backdrop {
+    padding: 0;
+  }
+
+  .modal {
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+    border: none;
+  }
+
+  .modalHeader {
+    padding: 1rem 1.25rem;
+  }
+
+  .tabNav {
+    padding: 0.5rem 1rem;
+  }
+
+  .panelContent {
+    padding: 1.25rem 1rem;
+  }
+
+  .grid2 {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .rowItem {
+    padding: 0.85rem 1rem;
+  }
+
+  .actionCard {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .outlineBtn,
+  .dangerBtn {
+    align-self: flex-start;
+  }
+}

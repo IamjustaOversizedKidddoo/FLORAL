@@ -1,9 +1,11 @@
-/// <reference types="vite/client" />
-
-interface ImportMetaEnv {
-  readonly VITE_PUBLIC_APP_URL?: string;
+// CSS Module type declarations for TypeScript
+declare module '*.module.css' {
+  const classes: Record<string, string>;
+  export default classes;
 }
 
-interface ImportMeta {
-  readonly env: ImportMetaEnv;
+// Web Worker import type for Vite's ?worker syntax
+declare module '*?worker' {
+  const WorkerFactory: new () => Worker;
+  export default WorkerFactory;
 }

@@ -1,0 +1,164 @@
+/* ============================================================
+   APP.MODULE.CSS — Root layout, obsidian canvas & atmosphere
+   ============================================================ */
+
+.appShell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100dvh;
+  width: 100%;
+  background: var(--bg-canvas-radial);
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  overflow: hidden;
+  transition:
+    background-color var(--duration-medium) var(--ease-out-soft),
+    transform var(--duration-medium) var(--ease-out-soft),
+    opacity var(--duration-medium) var(--ease-out-soft);
+  animation: pageReveal var(--duration-long) var(--ease-out-soft) forwards;
+}
+
+/* Spatial depth: main app shell recedes cleanly when modal is open (no blur) */
+.appShell.receding {
+  transform: scale(0.985);
+  opacity: 0.75;
+}
+
+/* Ambient breathing atmosphere during active focus sessions */
+.appShell.runningAtmosphere::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 90vmin;
+  height: 90vmin;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--mode-accent-dim) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  animation: ambientBreathe 8s var(--ease-in-out-smooth) infinite;
+}
+
+/* Cursor hidden during deep idle focus */
+.appShell.cursorHidden {
+  cursor: none;
+}
+
+/* Subtle grain overlay (optional preference) */
+.appShell.grainBackground::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 160px 160px;
+}
+
+/* ----------------------------------------------------------
+   MAIN STAGE — Hero stage with true optical centering
+   ---------------------------------------------------------- */
+.mainStage {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  justify-items: center;
+  position: relative;
+  z-index: var(--z-base);
+  width: 100%;
+  height: 100%;
+  padding: 0 var(--space-6);
+  margin: auto;
+  box-sizing: border-box;
+}
+
+.topSpacer {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.heroWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+}
+
+.controlsWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  align-self: start;
+  width: 100%;
+  padding-top: var(--space-2);
+  will-change: opacity, transform;
+  transition:
+    opacity var(--duration-medium) var(--ease-out-soft),
+    transform var(--duration-medium) var(--ease-out-soft);
+}
+
+/* ----------------------------------------------------------
+   TOP-RIGHT QUOTES WIDGET — Ambient Mindset Layer
+   ---------------------------------------------------------- */
+.topRightQuotes {
+  position: absolute;
+  top: clamp(4.5rem, 6.8vh, 5.25rem);
+  right: var(--space-8);
+  z-index: var(--z-chrome);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  pointer-events: auto;
+  transition: opacity var(--duration-fade) var(--ease-linear);
+}
+
+.topRightQuotes.idleHidden {
+  opacity: 0.35;
+}
+
+@media (max-width: 1024px) {
+  .topRightQuotes {
+    top: 4.25rem;
+    right: var(--space-6);
+  }
+}
+
+@media (max-width: 768px) {
+  .topRightQuotes {
+    top: 4.25rem;
+    right: var(--space-4);
+  }
+}
+
+@media (max-width: 480px) {
+  .topRightQuotes {
+    display: none; /* Keep mobile viewport focused on timer */
+  }
+}
+
+@media (max-width: 640px) {
+  .mainStage {
+    padding: 0 var(--space-4);
+  }
+}
+
+@media (max-height: 540px) {
+  .mainStage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+  }
+  .topSpacer {
+    display: none;
+  }
+}

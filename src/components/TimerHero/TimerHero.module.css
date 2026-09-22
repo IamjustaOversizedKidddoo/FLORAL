@@ -1,0 +1,213 @@
+/* ============================================================
+   TIMER HERO — Cinematic typography centerpiece
+   ============================================================ */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: var(--z-base);
+  width: 100%;
+  contain: layout;
+}
+
+/* ----------------------------------------------------------
+   DIGITS CONTAINER
+   ---------------------------------------------------------- */
+.digitsContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.digits {
+  color: var(--text-hero);
+  font-family: var(--font-timer);
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-size: var(--timer-font-size);
+  font-weight: var(--timer-font-weight);
+  line-height: var(--timer-line-height);
+  letter-spacing: var(--timer-letter-spacing);
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+  -webkit-text-stroke: clamp(1.5px, 0.28vw, 3.5px) currentColor;
+  paint-order: stroke fill;
+  user-select: none;
+  -webkit-user-select: none;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  transition: transform var(--duration-medium) var(--ease-out-soft),
+              opacity var(--duration-short) var(--ease-in-out-smooth);
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+.digits.hasHours {
+  font-size: var(--timer-font-size-hours);
+}
+
+.digits.running {
+  transform: scale(1.018);
+  opacity: 1;
+}
+
+.digits.paused {
+  transform: scale(1);
+  opacity: 0.85;
+}
+
+.digits.completed {
+  opacity: 0.65;
+  transform: scale(0.99);
+}
+
+.digitGroup {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.04em;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+}
+
+.digit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0.82ch;
+  transform: scaleX(1.18);
+  transform-origin: center;
+  text-align: center;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+  -webkit-text-stroke: clamp(1.5px, 0.28vw, 3.5px) currentColor;
+  paint-order: stroke fill;
+}
+
+/* Tabular mono colon separator with optical baseline alignment */
+.colon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transform: translateY(-0.06em);
+  padding: 0 0.08em;
+  margin: 0 0.12em;
+  width: 0.45ch;
+  -webkit-text-stroke: clamp(1.5px, 0.28vw, 3.5px) currentColor;
+  paint-order: stroke fill;
+  transition: opacity var(--duration-fast) var(--ease-linear);
+  color: var(--text-hero);
+}
+
+.colon.pulsing {
+  animation: colonBreathe 1s steps(1, start) infinite;
+}
+
+@keyframes colonBreathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+.period {
+  display: inline-block;
+  vertical-align: baseline;
+  transform: translateY(-0.06em);
+  padding: 0 0.05em;
+  opacity: 0.9;
+  font-family: var(--font-timer);
+}
+
+/* ----------------------------------------------------------
+   HAIRLINE PROGRESS TRACK
+   ---------------------------------------------------------- */
+.progressTrack {
+  margin-top: var(--space-6);
+  width: var(--progress-track-width);
+  height: 1px;
+  background-color: var(--progress-track-bg);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: var(--mode-progress);
+  border-radius: var(--radius-full);
+  transition: width 0.25s linear,
+              background-color var(--duration-medium) var(--ease-out-soft);
+  transform-origin: left center;
+}
+
+/* ----------------------------------------------------------
+   AMBIENT GLOW (Completion Sequence)
+   ---------------------------------------------------------- */
+.ambientGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(65vmin, 600px);
+  height: min(65vmin, 600px);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    var(--mode-accent-dim) 0%,
+    transparent 65%
+  );
+  pointer-events: none;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity var(--duration-slow) var(--ease-smooth);
+}
+
+.ambientGlow.visible {
+  opacity: 1;
+  animation: completionGlow var(--duration-cinematic) var(--ease-cinematic) forwards;
+}
+
+/* ----------------------------------------------------------
+   RESPONSIVE BREAKPOINTS
+   ---------------------------------------------------------- */
+@media (max-width: 480px) {
+  .digits {
+    font-size: clamp(4.25rem, 20vw, 5.75rem);
+  }
+  .digits.hasHours {
+    font-size: clamp(3rem, 14vw, 4.25rem);
+  }
+  .digit {
+    min-width: 0.78ch;
+    transform: scaleX(1.14);
+  }
+  .progressTrack {
+    margin-top: var(--space-4);
+    width: clamp(180px, 55vw, 280px);
+  }
+}
+
+@media (min-width: 481px) and (max-width: 1024px) {
+  .digits {
+    font-size: clamp(6.5rem, 16vw, 10rem);
+  }
+  .digits.hasHours {
+    font-size: clamp(4.5rem, 12vw, 7.8rem);
+  }
+}
+
+@media (min-width: 1441px) {
+  .digits {
+    font-size: clamp(11rem, 15vw, 16rem);
+  }
+  .digit {
+    min-width: 0.85ch;
+    transform: scaleX(1.2);
+  }
+}

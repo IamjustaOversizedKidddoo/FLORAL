@@ -1,0 +1,16 @@
+{
+  "name": "Chronos Focus",
+  "short_name": "Chronos",
+  "description": "A premium, distraction-free Pomodoro focus timer",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

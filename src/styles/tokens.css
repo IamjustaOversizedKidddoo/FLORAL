@@ -1,0 +1,181 @@
+/* ============================================================
+   DESIGN TOKENS — Cinematic Obsidian Minimalist Focus System
+   ============================================================ */
+
+/* Hacked typeface (David Libeau / Watch Dogs aesthetic) */
+@font-face {
+  font-family: 'Hacked';
+  src: url('/fonts/HACKED.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* ----------------------------------------------------------
+     TYPOGRAPHY — Space Grotesk Geometric Sans-Serif System
+     ---------------------------------------------------------- */
+  --font-sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', Menlo, Consolas, monospace;
+  --font-timer: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Timer digits: fluid wide & bold responsive typography */
+  --timer-font-size: clamp(6.5rem, 18vw, 13.5rem);
+  --timer-font-size-hours: clamp(4.5rem, 13vw, 9.5rem);
+  --timer-font-weight: 700;
+  --timer-letter-spacing: 0.08em;
+  --timer-line-height: 1;
+
+  /* Body & UI type scale */
+  --text-2xs: 0.625rem;    /* 10px */
+  --text-xs: 0.6875rem;    /* 11px */
+  --text-sm: 0.75rem;      /* 12px */
+  --text-base: 0.875rem;   /* 14px */
+  --text-md: 1rem;         /* 16px */
+  --text-lg: 1.125rem;     /* 18px */
+  --text-xl: 1.25rem;      /* 20px */
+
+  /* ----------------------------------------------------------
+     SPACING — Precise 4px rhythm
+     ---------------------------------------------------------- */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+  --space-24: 6rem;     /* 96px */
+
+  /* ----------------------------------------------------------
+     RADII
+     ---------------------------------------------------------- */
+  --radius-xs: 0.25rem;    /* 4px */
+  --radius-sm: 0.5rem;     /* 8px */
+  --radius-md: 0.75rem;    /* 12px */
+  --radius-lg: 1rem;       /* 16px */
+  --radius-xl: 1.25rem;    /* 20px */
+  --radius-full: 9999px;   /* Pills */
+
+  /* ----------------------------------------------------------
+     MOTION & EASING
+     ---------------------------------------------------------- */
+  /* Apple/Linear signature spring: rapid start, organic settle */
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-linear: linear;
+
+  --duration-instant: 75ms;
+  --duration-tactile: 120ms;   /* Button press */
+  --duration-fast: 180ms;      /* Hover feedback */
+  --duration-normal: 260ms;    /* Mode transitions */
+  --duration-slow: 400ms;      /* Panel slides */
+  --duration-fade: 700ms;      /* Chrome fade */
+
+  /* ----------------------------------------------------------
+     SURFACE & PALETTE — DEEP OBSIDIAN (Default)
+     ---------------------------------------------------------- */
+  --bg-canvas: #060608;
+  --bg-canvas-radial: radial-gradient(circle at 50% 42%, #0e0e13 0%, #060608 100%);
+  --bg-surface-lowest: #09090c;
+  --bg-surface: #0e0e12;
+  --bg-surface-elevated: #131318;
+  --bg-surface-hover: rgba(255, 255, 255, 0.04);
+  --bg-surface-active: rgba(255, 255, 255, 0.07);
+
+  /* Borders & Dividers */
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-medium: rgba(255, 255, 255, 0.10);
+  --border-strong: rgba(255, 255, 255, 0.18);
+  --border-focus: rgba(255, 255, 255, 0.5);
+
+  /* Typographic Contrast */
+  --text-hero: #ffffff;
+  --text-primary: #f0f0f4;
+  --text-secondary: #a2a2ad;
+  --text-muted: #747482;
+  --text-disabled: #383842;
+
+  /* Mode Accents */
+  --mode-focus-accent: #ededed;
+  --mode-focus-accent-dim: rgba(237, 237, 237, 0.08);
+  --mode-focus-progress: rgba(237, 237, 237, 0.85);
+
+  --mode-short-break-accent: #34d399;
+  --mode-short-break-accent-dim: rgba(52, 211, 153, 0.09);
+  --mode-short-break-progress: rgba(52, 211, 153, 0.85);
+
+  --mode-long-break-accent: #818cf8;
+  --mode-long-break-accent-dim: rgba(129, 140, 248, 0.09);
+  --mode-long-break-progress: rgba(129, 140, 248, 0.85);
+
+  --mode-accent: var(--mode-focus-accent);
+  --mode-accent-dim: var(--mode-focus-accent-dim);
+  --mode-progress: var(--mode-focus-progress);
+
+  /* Controls */
+  --btn-primary-bg: #ededed;
+  --btn-primary-color: #060608;
+  --btn-primary-hover-bg: #ffffff;
+  --btn-primary-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+
+  /* Shadows */
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-modal: 0 24px 64px -12px rgba(0, 0, 0, 0.95), 0 0 0 1px var(--border-subtle);
+  --shadow-glow: 0 0 140px -20px var(--mode-accent-dim);
+
+  /* Progress Bar */
+  --progress-track-bg: rgba(255, 255, 255, 0.06);
+  --progress-track-width: clamp(260px, 42vw, 520px);
+
+  /* Z-Indices */
+  --z-base: 1;
+  --z-chrome: 10;
+  --z-overlay: 30;
+}
+
+/* ============================================================
+   LIGHT THEME OVERRIDES
+   ============================================================ */
+[data-theme='LIGHT_PAPER'] {
+  --bg-canvas: #f8f8fa;
+  --bg-canvas-radial: radial-gradient(circle at 50% 42%, #ffffff 0%, #f4f4f7 100%);
+  --bg-surface-lowest: #f1f1f4;
+  --bg-surface: #eaebee;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-hover: rgba(0, 0, 0, 0.03);
+  --bg-surface-active: rgba(0, 0, 0, 0.06);
+
+  --border-subtle: rgba(0, 0, 0, 0.06);
+  --border-medium: rgba(0, 0, 0, 0.12);
+  --border-strong: rgba(0, 0, 0, 0.2);
+  --border-focus: rgba(0, 0, 0, 0.5);
+
+  --text-hero: #000000;
+  --text-primary: #121217;
+  --text-secondary: #3b3b44;
+  --text-muted: #5a5a66;
+  --text-disabled: #8a8a96;
+
+  --mode-focus-accent: #0c0c0f;
+  --mode-focus-accent-dim: rgba(12, 12, 15, 0.06);
+  --mode-focus-progress: rgba(12, 12, 15, 0.85);
+
+  --mode-short-break-accent: #059669;
+  --mode-short-break-accent-dim: rgba(5, 150, 105, 0.08);
+
+  --mode-long-break-accent: #4f46e5;
+  --mode-long-break-accent-dim: rgba(79, 70, 229, 0.08);
+
+  --btn-primary-bg: #0c0c0f;
+  --btn-primary-color: #f8f8fa;
+  --btn-primary-hover-bg: #000000;
+  --btn-primary-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+  --shadow-modal: 0 24px 64px -12px rgba(0, 0, 0, 0.14), 0 0 0 1px var(--border-subtle);
+  --progress-track-bg: rgba(0, 0, 0, 0.06);
+}

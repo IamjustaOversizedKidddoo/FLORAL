@@ -1,0 +1,157 @@
+/* ==========================================================================
+   CHRONOS FOCUS — MOTION DESIGN SYSTEM
+   "Motion Should Explain State, Not Entertain"
+   ========================================================================== */
+
+:root {
+  /* Duration Hierarchy */
+  --duration-instant: 100ms;    /* Toggle states, immediate feedback */
+  --duration-micro: 180ms;      /* Hover, press, button compression */
+  --duration-short: 260ms;      /* Tooltips, small badges, active dots */
+  --duration-medium: 380ms;     /* Tabs, state switches, mode changes */
+  --duration-long: 520ms;       /* Modal entrance, sheet reveal */
+  --duration-cinematic: 750ms;  /* Ambient atmosphere, completion sequences */
+
+  /* Easing Curves */
+  /* Fast, tactile response for user inputs */
+  --ease-micro: cubic-bezier(0.2, 0, 0, 1);
+  /* Natural deceleration for entering UI layers */
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Bilateral ease for bidirectional transitions */
+  --ease-in-out-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  /* Grounded, deliberate pacing for calm milestones */
+  --ease-cinematic: cubic-bezier(0.25, 1, 0.5, 1);
+  /* Restrained spring pop for session dots & toggles */
+  --ease-spring-subtle: cubic-bezier(0.34, 1.4, 0.64, 1);
+
+  /* Composite Transitions */
+  --transition-press: transform var(--duration-micro) var(--ease-micro),
+                      background-color var(--duration-micro) var(--ease-micro),
+                      border-color var(--duration-micro) var(--ease-micro),
+                      box-shadow var(--duration-micro) var(--ease-micro);
+
+  --transition-state: transform var(--duration-medium) var(--ease-out-soft),
+                      opacity var(--duration-medium) var(--ease-out-soft),
+                      filter var(--duration-medium) var(--ease-out-soft);
+
+  --transition-color: color var(--duration-short) var(--ease-in-out-smooth),
+                      background-color var(--duration-short) var(--ease-in-out-smooth),
+                      border-color var(--duration-short) var(--ease-in-out-smooth);
+}
+
+/* ==========================================================================
+   Keyframe Primitives
+   ========================================================================== */
+
+/* Subtle page reveal on initial boot */
+@keyframes pageReveal {
+  from {
+    opacity: 0;
+    transform: scale(0.99) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Barely perceptible ambient breathing for active focus sessions */
+@keyframes ambientBreathe {
+  0% {
+    transform: scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(1.03);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.35;
+  }
+}
+
+/* Soft pulse for the active session dot */
+@keyframes dotBreathe {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+/* Tactile pop when advancing a session */
+@keyframes dotAdvance {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Ambient glow expansion on session completion */
+@keyframes completionGlow {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+}
+
+/* Soft transition cue for digits */
+@keyframes digitsEnter {
+  from {
+    opacity: 0.85;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY: First-Class Reduced Motion
+   Strict adherence to prefers-reduced-motion: reduce.
+   Essential state communication is preserved via instant opacity switches.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-instant: 0ms;
+    --duration-micro: 0ms;
+    --duration-short: 1ms;
+    --duration-medium: 1ms;
+    --duration-long: 1ms;
+    --duration-cinematic: 1ms;
+
+    --transition-press: none !important;
+    --transition-state: opacity 0.05s linear !important;
+    --transition-color: color 0.05s linear, background-color 0.05s linear !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
