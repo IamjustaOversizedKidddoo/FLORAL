@@ -6,6 +6,10 @@
 
 import type { SSBActivity, StudySubject } from '../types';
 import type { PhaseId } from '../components/PhaseBadge/PhaseBadge';
+import { COMPLETE_90_DAY_CURRICULUM, getMissionForDay, type DailyCurriculumMission } from './curriculumData';
+
+export type { DailyCurriculumMission };
+export { COMPLETE_90_DAY_CURRICULUM, getMissionForDay };
 
 export interface DailyCurriculum {
   dayNumber: number;
@@ -36,6 +40,7 @@ export interface DailyCurriculum {
   };
   routineHabits: string[];
   reflectionPrompt: string;
+  mission: DailyCurriculumMission;
 }
 
 // Generate the complete 90-day syllabus
@@ -171,6 +176,7 @@ function build90DayProgramme(): DailyCurriculum[] {
         'Evening debrief & gear layout for tomorrow morning',
       ],
       reflectionPrompt: reflectionPrompts[(day - 1) % reflectionPrompts.length],
+      mission: getMissionForDay(day),
     });
   }
 

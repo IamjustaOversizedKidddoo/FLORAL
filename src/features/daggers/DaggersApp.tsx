@@ -14,6 +14,9 @@ import { Sidebar } from './components/Sidebar/Sidebar';
 import { ProgrammePage } from './components/ProgrammePage/ProgrammePage';
 import { AnalyticsPage } from './components/AnalyticsPage/AnalyticsPage';
 import { SettingsPage } from './components/SettingsPage/SettingsPage';
+import { AcademyPage } from './components/AcademyPage/AcademyPage';
+import { ExerciseLibraryPage } from './components/ExerciseLibraryPage/ExerciseLibraryPage';
+import { AssessmentsPage } from './components/AssessmentsPage/AssessmentsPage';
 import { subscribeToChronosUpdates, type FocusIntent } from './services/chronosIntegrationService';
 import { syncWithChronosSessions } from './storageService';
 
@@ -116,6 +119,28 @@ export function DaggersApp({
       {activeTab === 'PROGRAMME' && (
         <main className={styles.main} style={{ overflowY: 'auto' }}>
           <ProgrammePage currentDayNumber={currentDayNumber} />
+        </main>
+      )}
+
+      {activeTab === 'ACADEMY' && (
+        <main className={styles.main} style={{ overflowY: 'auto' }}>
+          <AcademyPage
+            days={days}
+            onUpdateDay={updateDay}
+            onLaunchFocusSession={onLaunchFocusSession}
+          />
+        </main>
+      )}
+
+      {activeTab === 'EXERCISES' && (
+        <main className={styles.main} style={{ overflowY: 'auto' }}>
+          <ExerciseLibraryPage />
+        </main>
+      )}
+
+      {activeTab === 'ASSESSMENTS' && (
+        <main className={styles.main} style={{ overflowY: 'auto' }}>
+          <AssessmentsPage days={days} currentDayNumber={currentDayNumber} />
         </main>
       )}
 

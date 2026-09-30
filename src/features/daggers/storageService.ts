@@ -34,9 +34,9 @@ export function clearLastStorageError(): void {
  * Compute the date string (YYYY-MM-DD) for a given day number (1-based).
  */
 export function dayNumberToDate(startDate: string, dayNumber: number): string {
-  const d = new Date(startDate);
-  d.setDate(d.getDate() + dayNumber - 1);
-  return d.toISOString().split('T')[0];
+  const [y, m, d] = startDate.split('-').map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d + dayNumber - 1));
+  return date.toISOString().split('T')[0];
 }
 
 /**
@@ -44,11 +44,11 @@ export function dayNumberToDate(startDate: string, dayNumber: number): string {
  * Returns 0 if before the start date, or > 90 if after.
  */
 export function todayDayNumber(startDate: string): number {
-  const start = new Date(startDate);
-  const today = new Date();
-  start.setHours(0, 0, 0, 0);
-  today.setHours(0, 0, 0, 0);
-  const diff = Math.floor((today.getTime() - start.getTime()) / 86400000) + 1;
+  const [sy, sm, sd] = startDate.split('-').map(Number);
+  const startUtc = Date.UTC(sy, sm - 1, sd);
+  const now = new Date();
+  const todayUtc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  const diff = Math.floor((todayUtc - startUtc) / 86400000) + 1;
   return diff;
 }
 

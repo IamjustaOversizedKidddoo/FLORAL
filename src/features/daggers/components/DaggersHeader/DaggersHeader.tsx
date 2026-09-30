@@ -7,7 +7,14 @@ import type { ProgrammeConfig } from '../../types';
 import { TOTAL_DAYS } from '../../constants';
 import { PhaseBadge } from '../PhaseBadge/PhaseBadge';
 
-export type DaggersTab = 'DASHBOARD' | 'PROGRAMME' | 'ANALYTICS' | 'SETTINGS';
+export type DaggersTab =
+  | 'DASHBOARD'
+  | 'PROGRAMME'
+  | 'ACADEMY'
+  | 'EXERCISES'
+  | 'ASSESSMENTS'
+  | 'ANALYTICS'
+  | 'SETTINGS';
 
 interface DaggersHeaderProps {
   config: ProgrammeConfig;
@@ -84,7 +91,7 @@ export function DaggersHeader({
           className={`${styles.navBtn} ${activeTab === 'DASHBOARD' ? styles.navActive : ''}`}
           onClick={() => onSelectTab('DASHBOARD')}
         >
-          Tracker
+          Mission
         </button>
         <button
           type="button"
@@ -92,6 +99,27 @@ export function DaggersHeader({
           onClick={() => onSelectTab('PROGRAMME')}
         >
           90-Day Plan
+        </button>
+        <button
+          type="button"
+          className={`${styles.navBtn} ${activeTab === 'ACADEMY' ? styles.navActive : ''}`}
+          onClick={() => onSelectTab('ACADEMY')}
+        >
+          Academy
+        </button>
+        <button
+          type="button"
+          className={`${styles.navBtn} ${activeTab === 'EXERCISES' ? styles.navActive : ''}`}
+          onClick={() => onSelectTab('EXERCISES')}
+        >
+          Exercises
+        </button>
+        <button
+          type="button"
+          className={`${styles.navBtn} ${activeTab === 'ASSESSMENTS' ? styles.navActive : ''}`}
+          onClick={() => onSelectTab('ASSESSMENTS')}
+        >
+          Assessments
         </button>
         <button
           type="button"

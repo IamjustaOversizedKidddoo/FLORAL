@@ -75,6 +75,151 @@ export interface DailyReflection {
 export type DayStatus = 'LOCKED' | 'ACTIVE' | 'COMPLETE' | 'PARTIAL' | 'MISSED';
 
 // ============================================================
+// ACADEMY & EDUCATIONAL CURRICULUM TYPES
+// ============================================================
+
+export type MasteryStatus = 'NOT_STARTED' | 'LEARNING' | 'PRACTISING' | 'COMPETENT' | 'NEEDS_REVISION';
+
+export type KnowledgeDomain =
+  | 'NAVIGATION'
+  | 'FIRST_AID'
+  | 'LEADERSHIP'
+  | 'MILITARY_STUDIES'
+  | 'COMMUNICATION'
+  | 'MENTAL_MODELS'
+  | 'PLANNING';
+
+export interface KnowledgeQuiz {
+  question: string;
+  options: string[];
+  correctIndex: number;
+  explanation: string;
+}
+
+export interface KnowledgeLesson {
+  id: string;
+  title: string;
+  domain: KnowledgeDomain;
+  objective: string;
+  explanation: string;
+  keyTakeaways: string[];
+  examples: string[];
+  practicalDrill: string;
+  quiz: KnowledgeQuiz;
+}
+
+export type MentalChallengeType =
+  | 'REASONING'
+  | 'MEMORY'
+  | 'DECISION_MAKING'
+  | 'CRITICAL_THINKING'
+  | 'PSYCHOLOGICAL';
+
+export interface ScoringRubricCriterion {
+  criteria: string;
+  maxScore: number;
+  description: string;
+}
+
+export interface MentalChallenge {
+  id: string;
+  type: MentalChallengeType;
+  title: string;
+  instructions: string;
+  timeLimitSec: number;
+  prompt: string;
+  scenarioContext?: string;
+  options?: string[]; // If MCQ/Reasoning
+  correctAnswer?: string | number;
+  rubric: ScoringRubricCriterion[];
+  modelSolution: string;
+  learningExplanation: string;
+}
+
+export interface SSBAssignment {
+  activity: SSBActivity;
+  title: string;
+  instructions: string;
+  timeLimitMin: number;
+  stimulus: string; // TAT scenario / WAT list / SRT problem / Lecturette topics
+  evaluationRubric: { olq: string; description: string }[];
+  exemplarResponse: string;
+}
+
+export interface PrescribedExerciseItem {
+  exerciseId: string;
+  sets: number;
+  repsOrDuration: string;
+  targetRpe: number; // 1-10
+  restSeconds: number;
+  techniqueCues: string;
+}
+
+export interface PhysicalTrainingAssignment {
+  category: 'AEROBIC' | 'CALISTHENICS' | 'LOWER_BODY' | 'CORE' | 'MOBILITY' | 'BENCHMARK' | 'RECOVERY';
+  title: string;
+  prescription: string;
+  warmup: string;
+  cooldown: string;
+  exercises: PrescribedExerciseItem[];
+  progressionNotes: string;
+  safetyWarning: string;
+}
+
+// User submission records
+export interface LessonSubmission {
+  quizAnswerIndex?: number;
+  isQuizPassed?: boolean;
+  practicalCompleted?: boolean;
+  mastery: MasteryStatus;
+  completedAt?: number;
+}
+
+export interface PhysicalExerciseLogItem {
+  exerciseId: string;
+  setsCompleted: number;
+  repsCompleted: string;
+  weightUsedKg?: number;
+  rpe: number;
+}
+
+export interface PhysicalLog {
+  completedExercises: PhysicalExerciseLogItem[];
+  totalDurationMin?: number;
+  overallRpe?: number; // 1-10
+  recoveryStatus?: 'WELL_RESTED' | 'MODERATE' | 'FATIGUED' | 'SORE';
+  safetyConfirmed: boolean;
+  notes?: string;
+}
+
+export interface MentalSubmission {
+  userAnswer: string;
+  score: number; // 0-100
+  submittedAt: number;
+  instructorFeedback: string;
+  rubricScores?: Record<string, number>;
+  isCompleted: boolean;
+}
+
+export interface SSBSubmission {
+  userResponse: string;
+  durationSpentMin?: number;
+  selfRatingOlqs?: Record<string, number>;
+  instructorFeedback: string;
+  isCompleted: boolean;
+}
+
+export interface InstructorAssessment {
+  overallGrade: 'EXEMPLARY' | 'COMPETENT' | 'MARGINAL' | 'UNSATISFACTORY';
+  totalScore: number; // 0-100
+  feedbackSummary: string;
+  strengths: string[];
+  weaknesses: string[];
+  remedialAction?: string;
+  assessedAt: number;
+}
+
+// ============================================================
 // CORE DAY ENTRY — Single day of the 90-day tracker
 // ============================================================
 export interface DayEntry {
@@ -82,12 +227,19 @@ export interface DayEntry {
   date: string;              // ISO: YYYY-MM-DD
   status: DayStatus;
 
-  // Training pillars
+  // Training pillars (backward-compatible)
   pt?: PTSession;
   ssb?: SSBSession;
   studies?: StudySession[];  // Multiple study blocks per day
   reflection?: DailyReflection;
   routineHabitsCompleted?: string[]; // Completed daily routine habits
+
+  // New Academy Interactive Submissions
+  lessonSubmission?: LessonSubmission;
+  physicalLog?: PhysicalLog;
+  mentalSubmission?: MentalSubmission;
+  ssbSubmission?: SSBSubmission;
+  instructorAssessment?: InstructorAssessment;
 
   // CHRONOS integration
   chronosFocusMinutes: number;  // Pulled from timerEvents — read-only
@@ -129,6 +281,8 @@ export interface WeeklySummary {
   totalStudyMinutes: number;
   totalSSBMinutes: number;
   totalFocusMinutes: number;  // From CHRONOS
+  academicMasteryCount?: number;
+  fitnessBenchmarkPassed?: boolean;
 }
 
 // ============================================================
@@ -140,3 +294,4 @@ export interface DaggersPersistedStore {
   config: ProgrammeConfig;
   days: DayEntry[];
 }
+

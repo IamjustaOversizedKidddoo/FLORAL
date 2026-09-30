@@ -1,18 +1,30 @@
 // ============================================================
-// DayDetail — Daily Mission Briefing, Interactive Checklist, and Training Log
-// Connected directly to the 90-day structured programme
+// DayDetail — Daily Mission Interface (5-Step Training Cycle)
+// LEARN → PRACTISE → PERFORM → ASSESS → IMPROVE
+// Complete educational and assessment engine
 // ============================================================
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import styles from './DayDetail.module.css';
 import type {
-  DayEntry, PTSession, SSBSession, SSBActivity,
-  StudySession, StudySubject, DailyReflection, MoodRating,
+  DayEntry,
+  PTSession,
+  SSBSession,
+  DailyReflection,
+  MoodRating,
+  PhysicalLog,
 } from '../../types';
-import { SSB_ACTIVITY_LABELS, STUDY_SUBJECT_LABELS, MOOD_LABELS, SCORE_WEIGHTS } from '../../constants';
-import { getCurriculumForDay } from '../../data/programmeData';
+import { getMissionForDay } from '../../data/curriculumData';
 import { PhaseBadge } from '../PhaseBadge/PhaseBadge';
-import { getFocusSessionsForDate, launchChronosTimer, type FocusIntent } from '../../services/chronosIntegrationService';
+import { type FocusIntent } from '../../services/chronosIntegrationService';
+import {
+  evaluateLessonQuiz,
+  evaluateMentalSubmission,
+  evaluateSSBSubmission,
+  generateInstructorAssessment,
+} from '../../services/assessmentEngine';
+
+export type TrainingCycleStep = 'LEARN' | 'PRACTISE' | 'PERFORM' | 'ASSESS' | 'IMPROVE';
 
 interface DayDetailProps {
   entry: DayEntry | undefined;
@@ -21,794 +33,768 @@ interface DayDetailProps {
   onLaunchFocusSession?: (intent: FocusIntent) => void;
 }
 
-// ---- Sub-components ----
-
-function PTCard({
-  pt,
-  onChange,
-  disabled,
-}: {
-  pt?: PTSession;
-  onChange: (v: PTSession) => void;
-  disabled?: boolean;
-}) {
-  const v = pt ?? {};
-  return (
-    <div className={styles.card}>
-      <div className={styles.cardHeader}>
-        <div className={styles.cardTitle}>
-          <svg className={styles.cardIcon} viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
-            <path d="M2 7h10M7 2l5 5-5 5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          Physical Training
-        </div>
-        <span className={styles.cardWeight}>{SCORE_WEIGHTS.PT}%</span>
-      </div>
-      <div className={styles.cardBody}>
-        <div className={styles.fieldRow}>
-          <div className={styles.field}>
-            <label className={styles.fieldLabel}>Run (km)</label>
-            <input
-              className={styles.fieldInput}
-              type="number"
-              min="0"
-              step="0.1"
-              placeholder="0.0"
-              disabled={disabled}
-              value={v.runDistanceKm ?? ''}
-              onChange={(e) => onChange({ ...v, runDistanceKm: parseFloat(e.target.value) || undefined })}
-            />
-          </div>
-          <div className={styles.field}>
-            <label className={styles.fieldLabel}>Run (min)</label>
-            <input
-              className={styles.fieldInput}
-              type="number"
-              min="0"
-              placeholder="0"
-              disabled={disabled}
-              value={v.runTimeMin ?? ''}
-              onChange={(e) => onChange({ ...v, runTimeMin: parseInt(e.target.value) || undefined })}
-            />
-          </div>
-        </div>
-        <div className={styles.fieldRow}>
-          <div className={styles.field}>
-            <label className={styles.fieldLabel}>Push-Ups</label>
-            <input
-              className={styles.fieldInput}
-              type="number"
-              min="0"
-              placeholder="0"
-              disabled={disabled}
-              value={v.pushUps ?? ''}
-              onChange={(e) => onChange({ ...v, pushUps: parseInt(e.target.value) || undefined })}
-            />
-          </div>
-          <div className={styles.field}>
-            <label className={styles.fieldLabel}>Pull-Ups</label>
-            <input
-              className={styles.fieldInput}
-              type="number"
-              min="0"
-              placeholder="0"
-              disabled={disabled}
-              value={v.pullUps ?? ''}
-              onChange={(e) => onChange({ ...v, pullUps: parseInt(e.target.value) || undefined })}
-            />
-          </div>
-        </div>
-        <div className={styles.fieldRow}>
-          <div className={styles.field}>
-            <label className={styles.fieldLabel}>Sit-Ups</label>
-            <input
-              className={styles.fieldInput}
-              type="number"
-              min="0"
-              placeholder="0"
-              disabled={disabled}
-              value={v.sitUps ?? ''}
-              onChange={(e) => onChange({ ...v, sitUps: parseInt(e.target.value) || undefined })}
-            />
-          </div>
-          <div className={styles.field}>
-            <label className={styles.fieldLabel}>Swimming (laps)</label>
-            <input
-              className={styles.fieldInput}
-              type="number"
-              min="0"
-              placeholder="0"
-              disabled={disabled}
-              value={v.swimmingLaps ?? ''}
-              onChange={(e) => onChange({ ...v, swimmingLaps: parseInt(e.target.value) || undefined })}
-            />
-          </div>
-        </div>
-        <div className={styles.field}>
-          <label className={styles.fieldLabel}>Custom Drills / Notes</label>
-          <input
-            className={styles.fieldInput}
-            type="text"
-            placeholder="e.g. Tabata, burpees, ruck march..."
-            disabled={disabled}
-            value={v.customDrills ?? ''}
-            onChange={(e) => onChange({ ...v, customDrills: e.target.value })}
-          />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function SSBCard({
-  ssb,
-  onChange,
-  disabled,
-}: {
-  ssb?: SSBSession;
-  onChange: (v: SSBSession) => void;
-  disabled?: boolean;
-}) {
-  const activities = ssb?.activities ?? [];
-  const toggleActivity = (act: SSBActivity) => {
-    if (disabled) return;
-    const next = activities.includes(act)
-      ? activities.filter((a) => a !== act)
-      : [...activities, act];
-    onChange({ ...ssb, activities: next });
-  };
-  return (
-    <div className={styles.card}>
-      <div className={styles.cardHeader}>
-        <div className={styles.cardTitle}>
-          <svg className={styles.cardIcon} viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
-            <rect x="2" y="3" width="10" height="8" rx="1"/>
-            <path d="M5 3V2M9 3V2"/>
-          </svg>
-          SSB Preparation
-        </div>
-        <span className={styles.cardWeight}>{SCORE_WEIGHTS.SSB}%</span>
-      </div>
-      <div className={styles.cardBody}>
-        <div className={styles.activityGrid}>
-          {(Object.keys(SSB_ACTIVITY_LABELS) as SSBActivity[]).map((act) => (
-            <label key={act} className={styles.activityItem}>
-              <input
-                type="checkbox"
-                disabled={disabled}
-                checked={activities.includes(act)}
-                onChange={() => toggleActivity(act)}
-              />
-              <span>{SSB_ACTIVITY_LABELS[act]}</span>
-            </label>
-          ))}
-        </div>
-        <div className={styles.fieldRow}>
-          <div className={styles.field}>
-            <label className={styles.fieldLabel}>Duration (min)</label>
-            <input
-              className={styles.fieldInput}
-              type="number"
-              min="0"
-              placeholder="0"
-              disabled={disabled}
-              value={ssb?.durationMin ?? ''}
-              onChange={(e) => onChange({ ...ssb, activities, durationMin: parseInt(e.target.value) || undefined })}
-            />
-          </div>
-          <div className={styles.field}>
-            <label className={styles.fieldLabel}>Topics</label>
-            <input
-              className={styles.fieldInput}
-              type="text"
-              placeholder="e.g. Series completion..."
-              disabled={disabled}
-              value={ssb?.topics ?? ''}
-              onChange={(e) => onChange({ ...ssb, activities, topics: e.target.value })}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function StudiesCard({
-  studies,
-  onChange,
-  disabled,
-}: {
-  studies?: StudySession[];
-  onChange: (v: StudySession[]) => void;
-  disabled?: boolean;
-}) {
-  const sessions = studies ?? [];
-
-  const addSession = () => {
-    if (disabled) return;
-    onChange([...sessions, { subject: 'MATHS', durationMin: 60 }]);
-  };
-
-  const updateSession = (idx: number, patch: Partial<StudySession>) => {
-    if (disabled) return;
-    onChange(sessions.map((s, i) => (i === idx ? { ...s, ...patch } : s)));
-  };
-
-  return (
-    <div className={styles.card}>
-      <div className={styles.cardHeader}>
-        <div className={styles.cardTitle}>
-          <svg className={styles.cardIcon} viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
-            <path d="M2 3h10M2 7h7M2 11h5"/>
-          </svg>
-          Studies
-        </div>
-        <span className={styles.cardWeight}>{SCORE_WEIGHTS.STUDIES}%</span>
-      </div>
-      <div className={styles.cardBody}>
-        {sessions.map((session, idx) => (
-          <div key={idx} className={styles.fieldRow}>
-            <div className={styles.field}>
-              <label className={styles.fieldLabel}>Subject</label>
-              <select
-                className={styles.fieldInput}
-                disabled={disabled}
-                value={session.subject}
-                onChange={(e) => updateSession(idx, { subject: e.target.value as StudySubject })}
-              >
-                {(Object.keys(STUDY_SUBJECT_LABELS) as StudySubject[]).map((s) => (
-                  <option key={s} value={s}>{STUDY_SUBJECT_LABELS[s]}</option>
-                ))}
-              </select>
-            </div>
-            <div className={styles.field}>
-              <label className={styles.fieldLabel}>Minutes</label>
-              <input
-                className={styles.fieldInput}
-                type="number"
-                min="0"
-                placeholder="60"
-                disabled={disabled}
-                value={session.durationMin}
-                onChange={(e) => updateSession(idx, { durationMin: parseInt(e.target.value) || 0 })}
-              />
-            </div>
-          </div>
-        ))}
-        {!disabled && (
-          <button
-            type="button"
-            className={styles.ratingBtn}
-            onClick={addSession}
-            style={{ textAlign: 'center', padding: '6px' }}
-          >
-            + Add Subject
-          </button>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function ReflectionCard({
-  reflection,
-  prompt,
-  onChange,
-  disabled,
-}: {
-  reflection?: DailyReflection;
-  prompt: string;
-  onChange: (v: DailyReflection) => void;
-  disabled?: boolean;
-}) {
-  const v = reflection ?? { text: '', mood: 3, overallRating: 3, mentalNote: '' };
-  const maxChars = 1000;
-
-  return (
-    <div className={styles.card}>
-      <div className={styles.cardHeader}>
-        <div className={styles.cardTitle}>
-          <svg className={styles.cardIcon} viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
-            <path d="M7 1L8.5 5.5H13L9.5 8L11 12.5L7 10L3 12.5L4.5 8L1 5.5H5.5Z"/>
-          </svg>
-          Daily Reflection & Debrief
-        </div>
-        <span className={styles.cardWeight}>{SCORE_WEIGHTS.REFLECTION}%</span>
-      </div>
-      <div className={styles.cardBody}>
-        <div className={styles.promptBox}>
-          <span className={styles.promptLabel}>Today's Reflection Prompt</span>
-          "{prompt}"
-        </div>
-
-        <div className={styles.field}>
-          <label className={styles.fieldLabel}>Officer Log / Self-Assessment</label>
-          <textarea
-            className={styles.textarea}
-            placeholder="Record your execution, obstacles faced, discipline lapses, or breakthroughs..."
-            disabled={disabled}
-            value={v.text}
-            maxLength={maxChars}
-            onChange={(e) => onChange({ ...v, text: e.target.value })}
-          />
-          <div className={styles.charCount}>{v.text.length}/{maxChars}</div>
-        </div>
-
-        <div className={styles.field}>
-          <label className={styles.fieldLabel}>Mental Toughness & Energy (1-5)</label>
-          <div className={styles.ratingRow}>
-            {([1, 2, 3, 4, 5] as MoodRating[]).map((r) => (
-              <button
-                key={r}
-                type="button"
-                disabled={disabled}
-                className={`${styles.ratingBtn} ${v.mood === r ? styles.active : ''}`}
-                onClick={() => onChange({ ...v, mood: r })}
-                aria-pressed={v.mood === r}
-                title={MOOD_LABELS[r]}
-              >
-                {r}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className={styles.field}>
-          <label className={styles.fieldLabel}>Day Rating</label>
-          <div className={styles.ratingRow}>
-            {([1, 2, 3, 4, 5] as MoodRating[]).map((r) => (
-              <button
-                key={r}
-                type="button"
-                disabled={disabled}
-                className={`${styles.ratingBtn} ${v.overallRating === r ? styles.active : ''}`}
-                onClick={() => onChange({ ...v, overallRating: r })}
-                aria-pressed={v.overallRating === r}
-              >
-                {r}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className={styles.field}>
-          <label className={styles.fieldLabel}>Key Takeaway / Mental Note</label>
-          <input
-            className={styles.fieldInput}
-            type="text"
-            placeholder="One core principle to carry into tomorrow..."
-            disabled={disabled}
-            value={v.mentalNote ?? ''}
-            maxLength={100}
-            onChange={(e) => onChange({ ...v, mentalNote: e.target.value })}
-          />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ChronosFocusCard({
-  date,
-  dayNumber,
-  defaultSubject,
-  defaultTask,
-  focusMinutes,
-  onLaunchFocusSession,
-}: {
-  date: string;
-  dayNumber: number;
-  defaultSubject?: string;
-  defaultTask?: string;
-  focusMinutes: number;
-  onLaunchFocusSession?: (intent: FocusIntent) => void;
-}) {
-  const sessions = getFocusSessionsForDate(date);
-  const subject = defaultSubject || 'MILITARY_HISTORY';
-  const task = defaultTask || `Day ${dayNumber} Focus Block`;
-
-  return (
-    <div className={styles.card}>
-      <div className={styles.cardHeader}>
-        <div className={styles.cardTitle}>
-          <svg className={styles.cardIcon} viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <circle cx="7" cy="7" r="5" />
-            <polyline points="7,4 7,7 9,8" />
-          </svg>
-          CHRONOS Focus Session
-        </div>
-        <span className={styles.cardWeight}>{focusMinutes}m recorded today</span>
-      </div>
-      <div className={styles.cardBody}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <div style={{ fontSize: '0.8rem', color: 'var(--d-text-secondary)', lineHeight: 1.4 }}>
-            Associate this day's academic or SSB preparation with a live CHRONOS focus block:
-            <br />
-            <strong>Target:</strong> {task}
-          </div>
-          <button
-            type="button"
-            className={styles.completeAllBtn}
-            style={{ alignSelf: 'flex-start' }}
-            onClick={() => launchChronosTimer(task, subject, dayNumber, onLaunchFocusSession)}
-          >
-            ▶ Launch CHRONOS Focus Timer
-          </button>
-        </div>
-
-        {sessions.length > 0 && (
-          <div style={{ marginTop: '8px', borderTop: '1px solid var(--d-border-subtle)', paddingTop: '8px' }}>
-            <div style={{ fontSize: '0.7rem', color: 'var(--d-text-muted)', textTransform: 'uppercase', marginBottom: '6px', fontFamily: 'var(--d-font-mono)' }}>
-              Today's Recorded CHRONOS Sessions ({sessions.length})
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              {sessions.map((s, idx) => (
-                <div key={s.id || idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--d-text-secondary)' }}>
-                  <span>✓ {new Date(s.completedAt || s.startedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ({s.completionType || 'COMPLETED'})</span>
-                  <span style={{ fontFamily: 'var(--d-font-mono)', color: 'var(--d-accent-bright)' }}>
-                    {Math.round((s.actualFocusedDurationSeconds || (s.durationMinutes || 25) * 60) / 60)} min
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-// ---- Main DayDetail component ----
-
 export function DayDetail({
   entry,
   dayNumber,
   onUpdate,
   onLaunchFocusSession,
 }: DayDetailProps) {
-  const [draft, setDraft] = useState<Partial<DayEntry>>({});
-  const [saved, setSaved] = useState(false);
+  const [activeCycleStep, setActiveCycleStep] = useState<TrainingCycleStep>('LEARN');
+  const [mentalAnswerInput, setMentalAnswerInput] = useState('');
+  const [ssbResponseInput, setSsbResponseInput] = useState('');
+  const [safetyChecked, setSafetyChecked] = useState(false);
+  const [logRpe, setLogRpe] = useState(7);
+  const [logDuration, setLogDuration] = useState(45);
+  const [logRecovery, setLogRecovery] = useState<'WELL_RESTED' | 'MODERATE' | 'FATIGUED' | 'SORE'>('WELL_RESTED');
 
-  const curriculum = getCurriculumForDay(dayNumber);
-  const isLocked = entry?.status === 'LOCKED';
+  const mission = useMemo(() => getMissionForDay(dayNumber), [dayNumber]);
 
-  const merged: Partial<DayEntry> = { ...entry, ...draft };
-  const currentHabits = merged.routineHabitsCompleted ?? [];
+  const isDisabled = entry?.status === 'LOCKED';
+  const score = entry?.completionScore ?? 0;
 
-  const handleSave = useCallback(() => {
-    onUpdate(draft);
-    setDraft({});
-    setSaved(true);
-    setTimeout(() => setSaved(false), 1800);
-  }, [draft, onUpdate]);
-
-  // Quick actions to apply prescribed targets
-  const handleApplyPT = useCallback(() => {
-    if (isLocked) return;
-    setDraft((prev) => ({
-      ...prev,
-      pt: {
-        ...(prev.pt ?? entry?.pt ?? {}),
-        runDistanceKm: curriculum.ptTarget.runDistanceKm,
-        runTimeMin: curriculum.ptTarget.runTimeMin,
-        pushUps: curriculum.ptTarget.pushUps,
-        pullUps: curriculum.ptTarget.pullUps,
-        sitUps: curriculum.ptTarget.sitUps,
-        swimmingLaps: curriculum.ptTarget.swimmingLaps,
-        customDrills: curriculum.ptTarget.drills,
-      },
-    }));
-  }, [curriculum, isLocked, entry]);
-
-  const handleApplySSB = useCallback(() => {
-    if (isLocked) return;
-    const currentActivities = merged.ssb?.activities ?? [];
-    const targetActivity = curriculum.ssbTask.activity;
-    const activities = currentActivities.includes(targetActivity)
-      ? currentActivities
-      : [...currentActivities, targetActivity];
-
-    setDraft((prev) => ({
-      ...prev,
-      ssb: {
-        ...(prev.ssb ?? entry?.ssb ?? { activities: [] }),
-        activities,
-        durationMin: curriculum.ssbTask.durationMin,
-        topics: curriculum.ssbTask.description,
-      },
-    }));
-  }, [curriculum, isLocked, merged.ssb, entry]);
-
-  const handleApplyStudy = useCallback(() => {
-    if (isLocked) return;
-    const currentStudies = merged.studies ?? [];
-    const exists = currentStudies.some((s) => s.subject === curriculum.studyTask.subject);
-    const updated = exists
-      ? currentStudies.map((s) =>
-          s.subject === curriculum.studyTask.subject
-            ? { ...s, durationMin: curriculum.studyTask.durationMin, topicsCovered: curriculum.studyTask.topic }
-            : s,
-        )
-      : [
-          ...currentStudies,
-          {
-            subject: curriculum.studyTask.subject,
-            durationMin: curriculum.studyTask.durationMin,
-            topicsCovered: curriculum.studyTask.topic,
-          },
-        ];
-
-    setDraft((prev) => ({
-      ...prev,
-      studies: updated,
-    }));
-  }, [curriculum, isLocked, merged.studies]);
-
-  const handleToggleHabit = useCallback(
-    (habit: string) => {
-      if (isLocked) return;
-      const nextHabits = currentHabits.includes(habit)
-        ? currentHabits.filter((h) => h !== habit)
-        : [...currentHabits, habit];
-
-      setDraft((prev) => ({
-        ...prev,
-        routineHabitsCompleted: nextHabits,
-      }));
+  // 1. LEARN Quiz Handler
+  const handleQuizSelect = useCallback(
+    (optionIdx: number) => {
+      if (isDisabled) return;
+      const sub = evaluateLessonQuiz(mission, optionIdx);
+      onUpdate({ lessonSubmission: sub });
     },
-    [currentHabits, isLocked],
+    [isDisabled, mission, onUpdate],
   );
 
-  const handleCompleteAll = useCallback(() => {
-    if (isLocked) return;
-    setDraft({
-      pt: {
-        runDistanceKm: curriculum.ptTarget.runDistanceKm,
-        runTimeMin: curriculum.ptTarget.runTimeMin,
-        pushUps: curriculum.ptTarget.pushUps,
-        pullUps: curriculum.ptTarget.pullUps,
-        sitUps: curriculum.ptTarget.sitUps,
-        swimmingLaps: curriculum.ptTarget.swimmingLaps,
-        customDrills: curriculum.ptTarget.drills,
-      },
-      ssb: {
-        activities: [curriculum.ssbTask.activity],
-        durationMin: curriculum.ssbTask.durationMin,
-        topics: curriculum.ssbTask.description,
-      },
-      studies: [
-        {
-          subject: curriculum.studyTask.subject,
-          durationMin: curriculum.studyTask.durationMin,
-          topicsCovered: curriculum.studyTask.topic,
-        },
-      ],
-      routineHabitsCompleted: [...curriculum.routineHabits],
-      reflection: {
-        text: merged.reflection?.text || `Completed prescribed targets for ${curriculum.title}. Pushed through fatigue and executed standard.`,
-        mood: 4,
-        overallRating: 4,
-        mentalNote: merged.reflection?.mentalNote || 'Disciplined execution under standard.',
-      },
+  // 2. PRACTISE Workout Logger
+  const handleSavePhysicalLog = useCallback(() => {
+    if (isDisabled) return;
+
+    const newLog: PhysicalLog = {
+      completedExercises: mission.physicalTraining.exercises.map((ex) => ({
+        exerciseId: ex.exerciseId,
+        setsCompleted: ex.sets,
+        repsCompleted: ex.repsOrDuration,
+        rpe: logRpe,
+      })),
+      totalDurationMin: logDuration,
+      overallRpe: logRpe,
+      recoveryStatus: logRecovery,
+      safetyConfirmed: safetyChecked,
+      notes: 'Logged via 5-step academy workout logger',
+    };
+
+    // Also update backward-compatible pt fields
+    const updatedPt: PTSession = {
+      ...entry?.pt,
+      runTimeMin: logDuration,
+      pushUps: mission.physicalTraining.exercises.find((e) => e.exerciseId === 'push_ups')?.sets ? 25 : undefined,
+    };
+
+    onUpdate({
+      physicalLog: newLog,
+      pt: updatedPt,
     });
-  }, [curriculum, isLocked, merged.reflection]);
+  }, [isDisabled, mission, logRpe, logDuration, logRecovery, safetyChecked, entry, onUpdate]);
 
-  // Compute score ring SVG
-  const score = entry?.completionScore ?? 0;
-  const radius = 20;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (score / 100) * circumference;
+  // 3. PERFORM Mental Challenge Submit
+  const handleSubmitMental = useCallback(() => {
+    if (isDisabled) return;
+    const currentAnswer = mentalAnswerInput || entry?.mentalSubmission?.userAnswer || '';
+    const mentalSub = evaluateMentalSubmission(mission, currentAnswer);
+    onUpdate({ mentalSubmission: mentalSub });
+  }, [isDisabled, mentalAnswerInput, entry, mission, onUpdate]);
 
-  if (!entry) {
-    return (
-      <div className={styles.emptyState}>
-        <svg className={styles.emptyIcon} viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <circle cx="24" cy="24" r="22"/>
-          <path d="M24 14v10l6 4"/>
-        </svg>
-        <div className={styles.emptyTitle}>Select a Day</div>
-        <div className={styles.emptySubtitle}>
-          Click any active or past day in the 90-day grid to inspect the curriculum and log training.
-        </div>
-      </div>
+  // 3. PERFORM SSB Submit
+  const handleSubmitSSB = useCallback(() => {
+    if (isDisabled) return;
+    const currentText = ssbResponseInput || entry?.ssbSubmission?.userResponse || '';
+    const ssbSub = evaluateSSBSubmission(mission, currentText);
+
+    const ssbSession: SSBSession = {
+      activities: [mission.ssbAssignment.activity],
+      durationMin: mission.ssbAssignment.timeLimitMin,
+      notes: currentText,
+    };
+
+    onUpdate({
+      ssbSubmission: ssbSub,
+      ssb: ssbSession,
+    });
+  }, [isDisabled, ssbResponseInput, entry, mission, onUpdate]);
+
+  // 4. ASSESS Virtual Instructor Trigger
+  const handleTriggerAssessment = useCallback(() => {
+    if (isDisabled) return;
+
+    const lessonSub = entry?.lessonSubmission || {
+      quizAnswerIndex: undefined,
+      isQuizPassed: false,
+      practicalCompleted: false,
+      mastery: 'NOT_STARTED',
+    };
+
+    const mentalSub = entry?.mentalSubmission || {
+      userAnswer: '',
+      score: 0,
+      submittedAt: Date.now(),
+      instructorFeedback: 'Incomplete mental challenge',
+      isCompleted: false,
+    };
+
+    const ssbSub = entry?.ssbSubmission || {
+      userResponse: '',
+      instructorFeedback: 'Incomplete SSB drill',
+      isCompleted: false,
+    };
+
+    const assessment = generateInstructorAssessment(
+      mission,
+      lessonSub,
+      mentalSub,
+      ssbSub,
+      entry?.physicalLog,
     );
-  }
+
+    // Compute updated completion score
+    let compScore = 0;
+    if (lessonSub.isQuizPassed) compScore += 25;
+    if (mentalSub.isCompleted) compScore += 25;
+    if (ssbSub.isCompleted) compScore += 25;
+    if (entry?.physicalLog?.safetyConfirmed) compScore += 25;
+
+    onUpdate({
+      instructorAssessment: assessment,
+      completionScore: compScore,
+      status: compScore >= 75 ? 'COMPLETE' : compScore >= 40 ? 'PARTIAL' : 'ACTIVE',
+    });
+  }, [isDisabled, mission, entry, onUpdate]);
+
+  // 5. IMPROVE Reflection and Habits
+  const handleReflectionChange = useCallback(
+    (text: string, mood?: MoodRating) => {
+      if (isDisabled) return;
+      const ref: DailyReflection = {
+        text,
+        mood: mood ?? entry?.reflection?.mood ?? 4,
+        overallRating: mood ?? entry?.reflection?.overallRating ?? 4,
+        mentalNote: entry?.reflection?.mentalNote,
+      };
+      onUpdate({ reflection: ref });
+    },
+    [isDisabled, entry, onUpdate],
+  );
+
+  const toggleHabit = useCallback(
+    (habit: string) => {
+      if (isDisabled) return;
+      const current = entry?.routineHabitsCompleted ?? [];
+      const next = current.includes(habit)
+        ? current.filter((h) => h !== habit)
+        : [...current, habit];
+      onUpdate({ routineHabitsCompleted: next });
+    },
+    [isDisabled, entry, onUpdate],
+  );
 
   return (
     <div className={styles.panel}>
-      {/* Day header */}
+      {/* Day & Mission Briefing Header */}
       <div className={styles.dayHeader}>
         <div className={styles.dayTitle}>
-          <span className={styles.dayNumLarge}>D{String(dayNumber).padStart(2, '0')}</span>
-          <span className={styles.dayDate}>{entry.date}</span>
-          <PhaseBadge dayNumber={dayNumber} compact />
+          <span className={styles.dayNumLarge}>DAY {String(dayNumber).padStart(2, '0')}</span>
+          <span className={styles.dayDate}>{entry?.date || `Day ${dayNumber}`}</span>
+          <PhaseBadge dayNumber={dayNumber} />
         </div>
 
         <div className={styles.scoreRing}>
-          <svg width="56" height="56" aria-label={`Completion score: ${score}%`}>
-            <g transform="rotate(-90 28 28)">
-              <circle cx="28" cy="28" r={radius} stroke="rgba(155,131,100,0.12)" strokeWidth="3" fill="none"/>
-              <circle
-                cx="28" cy="28" r={radius}
-                stroke={score >= 85 ? '#C8A84B' : score >= 60 ? '#4A7C5F' : '#9B8364'}
-                strokeWidth="3"
-                fill="none"
-                strokeLinecap="round"
-                strokeDasharray={circumference}
-                strokeDashoffset={offset}
-                style={{ transition: 'stroke-dashoffset 0.4s ease' }}
-              />
-            </g>
-            <text x="28" y="32" textAnchor="middle" fontSize="11" fontWeight="600" fontFamily="var(--font-mono, monospace)" fill="#C4A882">
-              {score}%
-            </text>
-          </svg>
-          <div className={styles.scoreLabel}>Score</div>
+          <div className={styles.scoreLabel}>EVALUATION SCORE</div>
+          <div style={{ fontFamily: 'var(--d-font-heading, monospace)', fontSize: '1.25rem', color: score >= 75 ? '#81C784' : '#C4A882' }}>
+            {score}%
+          </div>
         </div>
       </div>
 
-      {isLocked && (
+      {isDisabled && (
         <div className={styles.lockedBanner}>
-          <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor">
-            <path d="M8 1a3 3 0 0 0-3 3v2H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-1V4a3 3 0 0 0-3-3zm1 5V4a1 1 0 0 0-2 0v2h2z" />
-          </svg>
-          <span>Day {dayNumber} is scheduled for {entry.date}. Curriculum briefing is displayed below in read-only preview.</span>
+          <span>🔒</span>
+          <span>Day {dayNumber} is scheduled for a future training date. Content is available for preview and preparation.</span>
         </div>
       )}
 
       {/* Mission Briefing Card */}
-      <section className={styles.missionCard}>
+      <div className={styles.missionCard}>
         <div className={styles.missionTop}>
           <div className={styles.missionTitleGroup}>
             <div className={styles.missionBadges}>
-              <span className={styles.weekBadge}>Week {curriculum.weekNumber}</span>
-              <span className={styles.missionTheme}>{curriculum.theme}</span>
+              <span className={styles.weekBadge}>WEEK {mission.weekNumber}</span>
+              <span style={{ fontSize: '0.75rem', color: '#9B8364', textTransform: 'uppercase' }}>
+                Est: {mission.estimatedDurationMin} MIN
+              </span>
             </div>
-            <h3 className={styles.missionTitle}>{curriculum.title}</h3>
-          </div>
-          {!isLocked && (
-            <div className={styles.quickActions}>
-              <button
-                type="button"
-                className={styles.completeAllBtn}
-                onClick={handleCompleteAll}
-                title="Fill all prescribed training benchmarks for today"
-              >
-                Auto-Fill All Prescribed
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* 3 Prescribed target cards */}
-        <div className={styles.prescribedGrid}>
-          {/* PT Target */}
-          <div className={styles.targetCol}>
-            <div>
-              <div className={styles.targetHeader}>
-                <span className={styles.targetCategory}>PT Prescription</span>
-                {curriculum.ptTarget.runTimeMin && (
-                  <span className={styles.targetTime}>~{curriculum.ptTarget.runTimeMin}m</span>
-                )}
-              </div>
-              <p className={styles.targetDesc}>{curriculum.ptTarget.description}</p>
-              {curriculum.ptTarget.drills && (
-                <p className={styles.targetDesc} style={{ fontSize: '0.75rem', opacity: 0.8 }}>
-                  Drill: {curriculum.ptTarget.drills}
-                </p>
-              )}
-            </div>
-            {!isLocked && (
-              <button type="button" className={styles.applyBtn} onClick={handleApplyPT}>
-                + Apply PT Targets
-              </button>
-            )}
-          </div>
-
-          {/* SSB Target */}
-          <div className={styles.targetCol}>
-            <div>
-              <div className={styles.targetHeader}>
-                <span className={styles.targetCategory}>SSB Battery</span>
-                <span className={styles.targetTime}>{curriculum.ssbTask.durationMin}m</span>
-              </div>
-              <p className={styles.targetDesc}>
-                <strong>{curriculum.ssbTask.title}:</strong> {curriculum.ssbTask.description}
-              </p>
-            </div>
-            {!isLocked && (
-              <button type="button" className={styles.applyBtn} onClick={handleApplySSB}>
-                + Apply SSB Drill
-              </button>
-            )}
-          </div>
-
-          {/* Study Target */}
-          <div className={styles.targetCol}>
-            <div>
-              <div className={styles.targetHeader}>
-                <span className={styles.targetCategory}>Academic & Tech</span>
-                <span className={styles.targetTime}>{curriculum.studyTask.durationMin}m</span>
-              </div>
-              <p className={styles.targetDesc}>
-                <strong>{STUDY_SUBJECT_LABELS[curriculum.studyTask.subject]}:</strong> {curriculum.studyTask.topic}
-              </p>
-            </div>
-            {!isLocked && (
-              <button type="button" className={styles.applyBtn} onClick={handleApplyStudy}>
-                + Apply Study Topic
-              </button>
-            )}
+            <h2 style={{ fontSize: '1.2rem', color: '#F0EBE0', margin: '4px 0' }}>{mission.title}</h2>
           </div>
         </div>
 
-        {/* Routine habits checklist */}
-        <div className={styles.habitsSection}>
-          <div className={styles.habitsTitle}>Daily Operational Routine & Habits</div>
-          <div className={styles.habitGrid}>
-            {curriculum.routineHabits.map((habit) => {
-              const isChecked = currentHabits.includes(habit);
-              return (
-                <label key={habit} className={styles.habitItem}>
-                  <input
-                    type="checkbox"
-                    disabled={isLocked}
-                    checked={isChecked}
-                    onChange={() => handleToggleHabit(habit)}
-                  />
-                  <span className={isChecked ? styles.habitChecked : ''}>{habit}</span>
-                </label>
-              );
-            })}
-          </div>
+        <div style={{ fontSize: '0.85rem', color: '#C4A882', lineHeight: '1.4' }}>
+          <strong>Operational Objective:</strong> {mission.objective}
         </div>
-      </section>
-
-      {/* CHRONOS Focus Session Integration */}
-      <ChronosFocusCard
-        date={entry.date}
-        dayNumber={dayNumber}
-        defaultSubject={curriculum.studyTask.subject}
-        defaultTask={curriculum.studyTask.topic}
-        focusMinutes={entry.chronosFocusMinutes}
-        onLaunchFocusSession={onLaunchFocusSession}
-      />
-
-      {/* Four pillars logging cards */}
-      <div className={styles.pillars}>
-        <PTCard
-          pt={merged.pt}
-          disabled={isLocked}
-          onChange={(v) => setDraft((d) => ({ ...d, pt: v }))}
-        />
-        <SSBCard
-          ssb={merged.ssb}
-          disabled={isLocked}
-          onChange={(v) => setDraft((d) => ({ ...d, ssb: v }))}
-        />
-        <StudiesCard
-          studies={merged.studies}
-          disabled={isLocked}
-          onChange={(v) => setDraft((d) => ({ ...d, studies: v }))}
-        />
-        <ReflectionCard
-          reflection={merged.reflection}
-          prompt={curriculum.reflectionPrompt}
-          disabled={isLocked}
-          onChange={(v) => setDraft((d) => ({ ...d, reflection: v }))}
-        />
       </div>
 
-      {/* Save Action */}
-      {!isLocked && (
+      {/* 5-Step Training Cycle Navigation */}
+      <nav className={styles.cycleNav} aria-label="Training Cycle">
         <button
           type="button"
-          className={`${styles.saveBtn} ${saved ? styles.saved : ''}`}
-          onClick={handleSave}
-          disabled={Object.keys(draft).length === 0}
+          className={`${styles.cycleBtn} ${activeCycleStep === 'LEARN' ? styles.cycleBtnActive : ''}`}
+          onClick={() => setActiveCycleStep('LEARN')}
         >
-          {saved ? '✓ Saved to Log' : 'Save Day Log'}
+          <span className={styles.cycleStepNum}>STEP 1</span>
+          <span>📖 LEARN</span>
         </button>
+
+        <button
+          type="button"
+          className={`${styles.cycleBtn} ${activeCycleStep === 'PRACTISE' ? styles.cycleBtnActive : ''}`}
+          onClick={() => setActiveCycleStep('PRACTISE')}
+        >
+          <span className={styles.cycleStepNum}>STEP 2</span>
+          <span>🏋️ PRACTISE</span>
+        </button>
+
+        <button
+          type="button"
+          className={`${styles.cycleBtn} ${activeCycleStep === 'PERFORM' ? styles.cycleBtnActive : ''}`}
+          onClick={() => setActiveCycleStep('PERFORM')}
+        >
+          <span className={styles.cycleStepNum}>STEP 3</span>
+          <span>🧠 PERFORM</span>
+        </button>
+
+        <button
+          type="button"
+          className={`${styles.cycleBtn} ${activeCycleStep === 'ASSESS' ? styles.cycleBtnActive : ''}`}
+          onClick={() => setActiveCycleStep('ASSESS')}
+        >
+          <span className={styles.cycleStepNum}>STEP 4</span>
+          <span>🎖️ ASSESS</span>
+        </button>
+
+        <button
+          type="button"
+          className={`${styles.cycleBtn} ${activeCycleStep === 'IMPROVE' ? styles.cycleBtnActive : ''}`}
+          onClick={() => setActiveCycleStep('IMPROVE')}
+        >
+          <span className={styles.cycleStepNum}>STEP 5</span>
+          <span>📝 IMPROVE</span>
+        </button>
+      </nav>
+
+      {/* STEP 1: LEARN (Knowledge Doctrine & Quiz) */}
+      {activeCycleStep === 'LEARN' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div className={styles.card}>
+            <div className={styles.cardHeader}>
+              <div className={styles.cardTitle}>
+                <span>📖 Knowledge Lesson: {mission.learningLesson.title}</span>
+              </div>
+              <span className={styles.categoryTag}>{mission.learningLesson.domain}</span>
+            </div>
+
+            <div className={styles.cardBody} style={{ gap: '14px' }}>
+              <div style={{ fontSize: '0.85rem', color: '#D6CEBE', lineHeight: '1.6' }}>
+                {mission.learningLesson.explanation}
+              </div>
+
+              <div>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#C4A882', textTransform: 'uppercase', marginBottom: '6px' }}>
+                  Core Operational Takeaways
+                </div>
+                <ul style={{ margin: 0, paddingLeft: '20px', color: '#C7BFB0', fontSize: '0.8rem', lineHeight: '1.5' }}>
+                  {mission.learningLesson.keyTakeaways.map((t, idx) => (
+                    <li key={idx}>{t}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#C4A882', textTransform: 'uppercase', marginBottom: '4px' }}>
+                  Practical Field Drill
+                </div>
+                <div style={{ fontSize: '0.8rem', color: '#9B8364', fontStyle: 'italic', background: 'rgba(196, 168, 130, 0.08)', padding: '8px 12px', borderRadius: '3px' }}>
+                  {mission.learningLesson.practicalDrill}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Verification Quiz */}
+          <div className={styles.quizCard}>
+            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#C4A882', textTransform: 'uppercase' }}>
+              Step 1 Verification Quiz
+            </div>
+            <div className={styles.quizQuestion}>{mission.learningLesson.quiz.question}</div>
+
+            <div className={styles.quizOptionsList}>
+              {mission.learningLesson.quiz.options.map((opt, optIdx) => {
+                const selected = entry?.lessonSubmission?.quizAnswerIndex === optIdx;
+                const isCorrect = optIdx === mission.learningLesson.quiz.correctIndex;
+                const hasAnswered = entry?.lessonSubmission?.quizAnswerIndex !== undefined;
+
+                let optClass = styles.quizOptionItem;
+                if (hasAnswered) {
+                  if (isCorrect) optClass += ` ${styles.quizOptionSuccess}`;
+                  else if (selected) optClass += ` ${styles.quizOptionFailure}`;
+                }
+
+                return (
+                  <button
+                    key={optIdx}
+                    type="button"
+                    className={optClass}
+                    onClick={() => handleQuizSelect(optIdx)}
+                  >
+                    {String.fromCharCode(65 + optIdx)}. {opt}
+                  </button>
+                );
+              })}
+            </div>
+
+            {entry?.lessonSubmission?.quizAnswerIndex !== undefined && (
+              <div className={styles.quizFeedback}>
+                <strong>Instructor Rationale:</strong> {mission.learningLesson.quiz.explanation}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* STEP 2: PRACTISE (Physical Training & Logger) */}
+      {activeCycleStep === 'PRACTISE' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div className={styles.card}>
+            <div className={styles.cardHeader}>
+              <div className={styles.cardTitle}>
+                <span>🏋️ {mission.physicalTraining.title}</span>
+              </div>
+              <span className={styles.categoryTag}>{mission.physicalTraining.category}</span>
+            </div>
+
+            <div className={styles.cardBody} style={{ gap: '14px' }}>
+              <div style={{ fontSize: '0.85rem', color: '#F0EBE0' }}>
+                <strong>Prescription:</strong> {mission.physicalTraining.prescription}
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '0.75rem' }}>
+                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '8px', borderRadius: '3px' }}>
+                  <span style={{ color: '#9B8364', fontWeight: 700 }}>WARMUP:</span> {mission.physicalTraining.warmup}
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '8px', borderRadius: '3px' }}>
+                  <span style={{ color: '#9B8364', fontWeight: 700 }}>COOLDOWN:</span> {mission.physicalTraining.cooldown}
+                </div>
+              </div>
+
+              {/* Prescribed Exercises List */}
+              <div className={styles.exercisePrescriptionList}>
+                {mission.physicalTraining.exercises.map((ex, i) => (
+                  <div key={i} className={styles.exerciseItemBox}>
+                    <div className={styles.exerciseItemHeader}>
+                      <span>{ex.exerciseId.replace('_', ' ').toUpperCase()}</span>
+                      <span>{ex.sets} sets × {ex.repsOrDuration} (RPE {ex.targetRpe})</span>
+                    </div>
+                    <div className={styles.exerciseItemCues}>Cue: {ex.techniqueCues}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Interactive Workout Logger */}
+          <div className={styles.card}>
+            <div className={styles.cardHeader}>
+              <div className={styles.cardTitle}>Workout Session Performance Log</div>
+              <span style={{ fontSize: '0.75rem', color: '#8C8270' }}>Record Verified Metrics</span>
+            </div>
+
+            <div className={styles.cardBody} style={{ gap: '14px' }}>
+              <div className={styles.fieldRow}>
+                <div className={styles.field}>
+                  <label className={styles.fieldLabel}>Duration (Minutes)</label>
+                  <input
+                    type="number"
+                    className={styles.fieldInput}
+                    value={logDuration}
+                    onChange={(e) => setLogDuration(parseInt(e.target.value) || 0)}
+                  />
+                </div>
+                <div className={styles.field}>
+                  <label className={styles.fieldLabel}>Perceived Exertion (RPE 1-10)</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="10"
+                    className={styles.fieldInput}
+                    value={logRpe}
+                    onChange={(e) => setLogRpe(parseInt(e.target.value) || 1)}
+                  />
+                </div>
+                <div className={styles.field}>
+                  <label className={styles.fieldLabel}>Recovery State</label>
+                  <select
+                    className={styles.fieldInput}
+                    value={logRecovery}
+                    onChange={(e) => setLogRecovery(e.target.value as any)}
+                  >
+                    <option value="WELL_RESTED">Well Rested</option>
+                    <option value="MODERATE">Moderate</option>
+                    <option value="FATIGUED">Fatigued</option>
+                    <option value="SORE">Sore / Stiff</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Safety Confirmation Checklist */}
+              <div className={styles.safetyConfirmBox}>
+                <input
+                  type="checkbox"
+                  id="safetyCheck"
+                  checked={safetyChecked || Boolean(entry?.physicalLog?.safetyConfirmed)}
+                  onChange={(e) => setSafetyChecked(e.target.checked)}
+                />
+                <label htmlFor="safetyCheck" style={{ cursor: 'pointer' }}>
+                  <strong>Safety Protocol Acknowledgment:</strong> I executed this session with safe form and confirm that I experienced no dizziness, chest pain, or acute joint pinch.
+                </label>
+              </div>
+
+              <button
+                type="button"
+                className={styles.saveBtn}
+                style={{ width: '100%', padding: '10px' }}
+                onClick={handleSavePhysicalLog}
+                disabled={isDisabled}
+              >
+                Log Physical Training Session
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* STEP 3: PERFORM (Mental Challenge & SSB Prep) */}
+      {activeCycleStep === 'PERFORM' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {/* Mental Grilling Challenge */}
+          <div className={styles.card}>
+            <div className={styles.cardHeader}>
+              <div className={styles.cardTitle}>
+                <span>🧠 {mission.mentalChallenge.title}</span>
+              </div>
+              <span className={styles.categoryTag}>{mission.mentalChallenge.type}</span>
+            </div>
+
+            <div className={styles.cardBody} style={{ gap: '12px' }}>
+              <div style={{ fontSize: '0.8rem', color: '#9B8364' }}>
+                Time Boundary: {mission.mentalChallenge.timeLimitSec} seconds | Strict Analytical Reasoning
+              </div>
+
+              <div style={{ fontSize: '0.9rem', color: '#F0EBE0', fontWeight: 600, background: 'rgba(15,14,11,0.7)', padding: '12px', borderRadius: '4px' }}>
+                {mission.mentalChallenge.prompt}
+              </div>
+
+              {/* MCQ Options if available */}
+              {mission.mentalChallenge.options ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  {mission.mentalChallenge.options.map((opt, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      className={`${styles.filterBtn} ${mentalAnswerInput === opt || entry?.mentalSubmission?.userAnswer === opt ? styles.filterBtnActive : ''}`}
+                      style={{ textAlign: 'left', padding: '8px 12px' }}
+                      onClick={() => setMentalAnswerInput(opt)}
+                    >
+                      {String.fromCharCode(65 + i)}. {opt}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <textarea
+                  className={styles.notesTextarea}
+                  rows={4}
+                  placeholder="Explain your decision, trade-off rationale, and risk mitigation steps..."
+                  value={mentalAnswerInput || entry?.mentalSubmission?.userAnswer || ''}
+                  onChange={(e) => setMentalAnswerInput(e.target.value)}
+                />
+              )}
+
+              <button
+                type="button"
+                className={styles.saveBtn}
+                style={{ width: '100%', padding: '8px' }}
+                onClick={handleSubmitMental}
+                disabled={isDisabled}
+              >
+                Submit Mental Challenge for Evaluation
+              </button>
+
+              {entry?.mentalSubmission?.submittedAt && (
+                <div className={styles.quizFeedback} style={{ marginTop: '8px' }}>
+                  <div style={{ fontWeight: 700, color: entry.mentalSubmission.score >= 70 ? '#81C784' : '#FFB74D' }}>
+                    Instructor Score: {entry.mentalSubmission.score}/100
+                  </div>
+                  <div>{entry.mentalSubmission.instructorFeedback}</div>
+                  <div style={{ marginTop: '6px', color: '#C4A882' }}>
+                    <strong>Model Solution:</strong> {mission.mentalChallenge.modelSolution}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* SSB Practical Assignment */}
+          <div className={styles.card}>
+            <div className={styles.cardHeader}>
+              <div className={styles.cardTitle}>
+                <span>🎯 SSB Preparation: {mission.ssbAssignment.title}</span>
+              </div>
+              <span className={styles.categoryTag}>{mission.ssbAssignment.activity}</span>
+            </div>
+
+            <div className={styles.cardBody} style={{ gap: '12px' }}>
+              <div style={{ fontSize: '0.85rem', color: '#D6CEBE' }}>
+                {mission.ssbAssignment.instructions}
+              </div>
+
+              <div style={{ background: 'rgba(196,168,130,0.08)', padding: '12px', borderRadius: '4px', fontSize: '0.85rem', color: '#F0EBE0' }}>
+                <strong>Exercise Stimulus:</strong>
+                <p style={{ margin: '6px 0 0 0', whiteSpace: 'pre-line' }}>{mission.ssbAssignment.stimulus}</p>
+              </div>
+
+              {onLaunchFocusSession && (
+                <button
+                  type="button"
+                  className={styles.filterBtn}
+                  style={{ alignSelf: 'flex-start', borderColor: '#C4A882', color: '#F0EBE0' }}
+                  onClick={() =>
+                    onLaunchFocusSession({
+                      task: `${mission.ssbAssignment.activity} Drill`,
+                      subject: 'SSB',
+                      dayNumber,
+                      createdAt: Date.now(),
+                    })
+                  }
+                >
+                  ⏱️ Launch Timed Practice in CHRONOS
+                </button>
+              )}
+
+              <textarea
+                className={styles.notesTextarea}
+                rows={5}
+                placeholder="Write your structured response (TAT story / WAT answers / SRT actions / Lecturette points)..."
+                value={ssbResponseInput || entry?.ssbSubmission?.userResponse || ''}
+                onChange={(e) => setSsbResponseInput(e.target.value)}
+              />
+
+              <button
+                type="button"
+                className={styles.saveBtn}
+                style={{ width: '100%', padding: '8px' }}
+                onClick={handleSubmitSSB}
+                disabled={isDisabled}
+              >
+                Submit SSB Drill
+              </button>
+
+              {entry?.ssbSubmission?.instructorFeedback && (
+                <div className={styles.quizFeedback}>
+                  <strong>Evaluator Review:</strong> {entry.ssbSubmission.instructorFeedback}
+                  <div style={{ marginTop: '6px', color: '#C4A882' }}>
+                    <strong>Exemplar Standard:</strong> {mission.ssbAssignment.exemplarResponse}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* STEP 4: ASSESS (Virtual Instructor Evaluation) */}
+      {activeCycleStep === 'ASSESS' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div className={styles.instructorCard}>
+            <div className={styles.instructorBadgeRow}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#F0EBE0' }}>Virtual Instructor Day Debrief</h3>
+                <span style={{ fontSize: '0.75rem', color: '#8C8270' }}>Objective Competence Analysis</span>
+              </div>
+
+              {entry?.instructorAssessment?.overallGrade && (
+                <span
+                  className={`${styles.gradePill} ${
+                    entry.instructorAssessment.overallGrade === 'EXEMPLARY'
+                      ? styles.gradeExemplary
+                      : entry.instructorAssessment.overallGrade === 'COMPETENT'
+                      ? styles.gradeCompetent
+                      : entry.instructorAssessment.overallGrade === 'MARGINAL'
+                      ? styles.gradeMarginal
+                      : styles.gradeUnsatisfactory
+                  }`}
+                >
+                  {entry.instructorAssessment.overallGrade} ({entry.instructorAssessment.totalScore}%)
+                </span>
+              )}
+            </div>
+
+            <button
+              type="button"
+              className={styles.saveBtn}
+              style={{ width: '100%', padding: '10px' }}
+              onClick={handleTriggerAssessment}
+              disabled={isDisabled}
+            >
+              Generate / Update Instructor Evaluation
+            </button>
+
+            {entry?.instructorAssessment && (
+              <>
+                <div style={{ fontSize: '0.875rem', color: '#D6CEBE', lineHeight: '1.5' }}>
+                  {entry.instructorAssessment.feedbackSummary}
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <div style={{ background: 'rgba(15,14,11,0.6)', padding: '12px', borderRadius: '4px' }}>
+                    <div style={{ color: '#81C784', fontWeight: 700, fontSize: '0.75rem', textTransform: 'uppercase', marginBottom: '6px' }}>
+                      Observed Strengths
+                    </div>
+                    <ul style={{ margin: 0, paddingLeft: '16px', color: '#C7BFB0', fontSize: '0.8rem', lineHeight: '1.4' }}>
+                      {entry.instructorAssessment.strengths.map((s, idx) => (
+                        <li key={idx}>{s}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div style={{ background: 'rgba(15,14,11,0.6)', padding: '12px', borderRadius: '4px' }}>
+                    <div style={{ color: '#FFB74D', fontWeight: 700, fontSize: '0.75rem', textTransform: 'uppercase', marginBottom: '6px' }}>
+                      Deficiencies / Attention Areas
+                    </div>
+                    <ul style={{ margin: 0, paddingLeft: '16px', color: '#C7BFB0', fontSize: '0.8rem', lineHeight: '1.4' }}>
+                      {entry.instructorAssessment.weaknesses.map((w, idx) => (
+                        <li key={idx}>{w}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {entry.instructorAssessment.remedialAction && (
+                  <div className={styles.remedialAlertBox}>
+                    <strong>Remedial Prescription:</strong> {entry.instructorAssessment.remedialAction}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* STEP 5: IMPROVE (Study, Reflection & Habits) */}
+      {activeCycleStep === 'IMPROVE' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {/* Study Block */}
+          <div className={styles.card}>
+            <div className={styles.cardHeader}>
+              <div className={styles.cardTitle}>
+                <span>📚 Academic Study Block: {mission.studyTask.subject}</span>
+              </div>
+              <span className={styles.categoryTag}>{mission.studyTask.durationMin} MIN</span>
+            </div>
+
+            <div className={styles.cardBody} style={{ gap: '10px' }}>
+              <div style={{ fontSize: '0.9rem', color: '#F0EBE0', fontWeight: 600 }}>
+                {mission.studyTask.topic}
+              </div>
+              <div style={{ fontSize: '0.825rem', color: '#9B8364' }}>
+                {mission.studyTask.syllabusObjective}
+              </div>
+
+              {onLaunchFocusSession && (
+                <button
+                  type="button"
+                  className={styles.filterBtn}
+                  style={{ alignSelf: 'flex-start', borderColor: '#C4A882', color: '#F0EBE0', marginTop: '6px' }}
+                  onClick={() =>
+                    onLaunchFocusSession({
+                      task: mission.studyTask.topic,
+                      subject: mission.studyTask.subject,
+                      dayNumber,
+                      createdAt: Date.now(),
+                    })
+                  }
+                >
+                  ⏱️ Launch {mission.studyTask.durationMin}m Study Timer in CHRONOS
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Daily Reflection & Rating */}
+          <div className={styles.card}>
+            <div className={styles.cardHeader}>
+              <div className={styles.cardTitle}>Daily Debrief & Personal Reflection</div>
+              <span style={{ fontSize: '0.75rem', color: '#8C8270' }}>Candidate Ownership</span>
+            </div>
+
+            <div className={styles.cardBody} style={{ gap: '12px' }}>
+              <div style={{ fontSize: '0.85rem', color: '#C4A882', fontStyle: 'italic' }}>
+                Prompt: "{mission.reflectionPrompt}"
+              </div>
+
+              <textarea
+                className={styles.notesTextarea}
+                rows={4}
+                placeholder="Record your honest reflection on discipline, resistance, and standard of execution..."
+                value={entry?.reflection?.text || ''}
+                onChange={(e) => handleReflectionChange(e.target.value)}
+                disabled={isDisabled}
+              />
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '0.75rem', color: '#8C8270' }}>Day Execution Rating:</span>
+                {[1, 2, 3, 4, 5].map((r) => (
+                  <button
+                    key={r}
+                    type="button"
+                    className={`${styles.filterBtn} ${(entry?.reflection?.overallRating ?? 4) === r ? styles.filterBtnActive : ''}`}
+                    onClick={() => handleReflectionChange(entry?.reflection?.text || '', r as MoodRating)}
+                  >
+                    {r} ★
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Routine Disciplined Habits */}
+          <div className={styles.card}>
+            <div className={styles.cardHeader}>
+              <div className={styles.cardTitle}>Daily Disciplined Routine Habits</div>
+              <span style={{ fontSize: '0.75rem', color: '#8C8270' }}>Non-Negotiables</span>
+            </div>
+
+            <div className={styles.cardBody}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {mission.routineHabits.map((habit, idx) => {
+                  const isChecked = entry?.routineHabitsCompleted?.includes(habit) || false;
+                  return (
+                    <label key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#D6CEBE', cursor: 'pointer' }}>
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={() => toggleHabit(habit)}
+                        disabled={isDisabled}
+                      />
+                      <span>{habit}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

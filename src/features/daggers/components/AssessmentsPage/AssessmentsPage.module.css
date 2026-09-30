@@ -1,0 +1,218 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6, 24px);
+  padding: var(--space-6, 24px);
+  max-width: 1100px;
+  margin: 0 auto;
+  color: var(--color-text, #F0EBE0);
+}
+
+.header {
+  border-bottom: 1px solid rgba(196, 168, 130, 0.2);
+  padding-bottom: var(--space-4, 16px);
+}
+
+.title {
+  font-family: var(--font-heading, monospace);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #F0EBE0;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: #9B8364;
+  line-height: 1.5;
+}
+
+.navRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-bottom: 1px solid rgba(155, 131, 100, 0.2);
+  padding-bottom: 12px;
+}
+
+.tabBtn {
+  background: transparent;
+  border: 1px solid rgba(155, 131, 100, 0.25);
+  border-radius: 3px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  color: #9B8364;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tabBtn:hover {
+  border-color: #C4A882;
+  color: #F0EBE0;
+}
+
+.tabBtnActive {
+  background: rgba(196, 168, 130, 0.2);
+  border-color: #C4A882;
+  color: #F0EBE0;
+  font-weight: 700;
+}
+
+.reportCard {
+  background: rgba(22, 20, 16, 0.85);
+  border: 1px solid rgba(196, 168, 130, 0.25);
+  border-radius: 4px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.reportHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-bottom: 1px solid rgba(196, 168, 130, 0.15);
+  padding-bottom: 16px;
+}
+
+.reportTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #F0EBE0;
+}
+
+.reportSubtitle {
+  font-size: 0.8rem;
+  color: #8C8270;
+  margin-top: 4px;
+}
+
+.statusBadge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.statusGraduated {
+  background: rgba(76, 175, 80, 0.2);
+  color: #81C784;
+  border: 1px solid rgba(76, 175, 80, 0.4);
+}
+
+.statusQualified {
+  background: rgba(255, 193, 7, 0.2);
+  color: #FFD54F;
+  border: 1px solid rgba(255, 193, 7, 0.4);
+}
+
+.statusRemedial {
+  background: rgba(244, 67, 54, 0.2);
+  color: #E57373;
+  border: 1px solid rgba(244, 67, 54, 0.4);
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.metricItem {
+  background: rgba(14, 12, 10, 0.6);
+  border: 1px solid rgba(155, 131, 100, 0.15);
+  border-radius: 3px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metricValue {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #C4A882;
+  font-family: var(--font-heading, monospace);
+}
+
+.metricLabel {
+  font-size: 0.7rem;
+  color: #8C8270;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.analysisSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .analysisSection {
+    grid-template-columns: 1fr;
+  }
+}
+
+.analysisBox {
+  background: rgba(18, 16, 13, 0.6);
+  border: 1px solid rgba(196, 168, 130, 0.15);
+  border-radius: 4px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.boxTitle {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.strengthTitle {
+  color: #81C784;
+}
+
+.weaknessTitle {
+  color: #FFB74D;
+}
+
+.bulletList {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.825rem;
+  color: #D6CEBE;
+  line-height: 1.4;
+}
+
+.remedialBox {
+  background: rgba(196, 168, 130, 0.08);
+  border: 1px solid rgba(196, 168, 130, 0.25);
+  border-radius: 4px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.remedialTitle {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #C4A882;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
