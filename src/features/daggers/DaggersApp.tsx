@@ -5,6 +5,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import styles from './DaggersApp.module.css';
+import './DaggersApp.css';
 import { useDaggers } from './hooks/useDaggers';
 import { DaggersHeader, type DaggersTab } from './components/DaggersHeader/DaggersHeader';
 import { DayGrid } from './components/DayGrid/DayGrid';
@@ -68,7 +69,7 @@ export function DaggersApp({
   );
 
   return (
-    <div className={styles.shell}>
+    <div className={styles.shell} data-daggers="true">
       <DaggersHeader
         config={config}
         currentDayNumber={currentDayNumber}

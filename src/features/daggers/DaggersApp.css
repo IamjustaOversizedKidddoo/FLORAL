@@ -3,18 +3,11 @@
    Scoped to [data-daggers] — zero collision with CHRONOS tokens
    ============================================================ */
 
-/* ---- Reset (scoped) ---- */
-*, *::before, *::after {
+/* ---- Reset (scoped to data-daggers) ---- */
+[data-daggers] *,
+[data-daggers] *::before,
+[data-daggers] *::after {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html[data-daggers] {
-  font-size: 16px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
 }
 
 /* ============================================================
@@ -167,8 +160,8 @@ a {
    KEYFRAME ANIMATIONS
    ============================================================ */
 @keyframes d-page-reveal {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 @keyframes d-pulse-subtle {

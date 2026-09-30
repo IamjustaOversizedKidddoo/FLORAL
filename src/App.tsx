@@ -56,8 +56,8 @@ export default function App() {
   // Screen wake lock when enabled and timer is running
   useWakeLock(state.settings.keepScreenAwake, isRunning);
 
-  // Idle detection — active when timer is running
-  const { isIdle } = useIdleTimer(isRunning);
+  // Idle detection — active only when timer is running on timer screen
+  const { isIdle } = useIdleTimer(isRunning && activeView === 'TIMER');
 
   // Document title + dynamic favicon sync
   useDocumentHead({
@@ -149,19 +149,6 @@ export default function App() {
         remainingMs={state.remainingMs}
       />
 
-      {/* Top navigation (Mode selector + settings + MIGHTY DAGGERS) */}
-      <Header
-        mode={state.mode}
-        status={state.status}
-        isIdle={isIdle}
-        showModeTabs={state.settings.showModeTabs}
-        onModeChange={actions.changeMode}
-        onSettingsOpen={() => setSettingsOpen(true)}
-        activeView={activeView}
-        onViewChange={setActiveView}
-        remainingMs={state.remainingMs}
-      />
-
       {activeView === 'DAGGERS' ? (
         <div className={styles.daggersContainer}>
           <DaggersApp
@@ -173,6 +160,19 @@ export default function App() {
         </div>
       ) : (
         <>
+          {/* Top navigation (Mode selector + settings + MIGHTY DAGGERS) */}
+          <Header
+            mode={state.mode}
+            status={state.status}
+            isIdle={isIdle}
+            showModeTabs={state.settings.showModeTabs}
+            onModeChange={actions.changeMode}
+            onSettingsOpen={() => setSettingsOpen(true)}
+            activeView={activeView}
+            onViewChange={setActiveView}
+            remainingMs={state.remainingMs}
+          />
+
           {/* Top Right Corner Quotes Widget */}
           <aside
             className={`${styles.topRightQuotes} ${isIdle ? styles.idleHidden : ''}`}
