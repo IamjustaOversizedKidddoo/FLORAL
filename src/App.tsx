@@ -12,6 +12,7 @@ import { LiveAnnouncer } from './components/LiveAnnouncer/LiveAnnouncer';
 import { SettingsModal } from './components/SettingsModal/SettingsModal';
 import { StatsModal } from './components/StatsModal/StatsModal';
 import { Quotes } from './components/Quotes/Quotes';
+import { DaggersApp } from './features/daggers/DaggersApp';
 import styles from './App.module.css';
 
 // Fullscreen API with cross-browser prefixes
@@ -25,12 +26,32 @@ function toggleFullscreen() {
 
 export default function App() {
   const { state, actions } = useTimer();
+  const [activeView, setActiveView] = useState<'TIMER' | 'DAGGERS'>('TIMER');
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [statsOpen, setStatsOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const isRunning = state.status === 'RUNNING';
+
+  // Support direct URL query parameter (e.g. ?view=daggers)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('view') === 'daggers') {
+      setActiveView('DAGGERS');
+    }
+  }, []);
+
+  // Launch a focus session initiated from a Daggers task
+  const handleLaunchFocusFromTracker = useCallback((_intent: { task: string; subject?: string; dayNumber: number }) => {
+    setActiveView('TIMER');
+    if (state.mode !== 'FOCUS') {
+      actions.changeMode('FOCUS');
+    }
+    if (state.status === 'IDLE' || state.status === 'COMPLETED') {
+      actions.start();
+    }
+  }, [state.mode, state.status, actions]);
 
   // Screen wake lock when enabled and timer is running
   useWakeLock(state.settings.keepScreenAwake, isRunning);
@@ -128,7 +149,7 @@ export default function App() {
         remainingMs={state.remainingMs}
       />
 
-      {/* Top navigation (Mode selector + settings) */}
+      {/* Top navigation (Mode selector + settings + MIGHTY DAGGERS) */}
       <Header
         mode={state.mode}
         status={state.status}
@@ -136,52 +157,68 @@ export default function App() {
         showModeTabs={state.settings.showModeTabs}
         onModeChange={actions.changeMode}
         onSettingsOpen={() => setSettingsOpen(true)}
+        activeView={activeView}
+        onViewChange={setActiveView}
+        remainingMs={state.remainingMs}
       />
 
-      {/* Top Right Corner Quotes Widget */}
-      <aside
-        className={`${styles.topRightQuotes} ${isIdle ? styles.idleHidden : ''}`}
-        aria-label="Mindset Quote"
-      >
-        <Quotes intervalMs={7000} />
-      </aside>
-
-      {/* Main hero stage — optical vertical centering */}
-      <main className={styles.mainStage} id="timer-main">
-        <div className={styles.topSpacer} aria-hidden="true" />
-        <div className={styles.heroWrapper}>
-          <TimerHero
+      {activeView === 'DAGGERS' ? (
+        <div className={styles.daggersContainer}>
+          <DaggersApp
+            onSwitchToTimer={() => setActiveView('TIMER')}
+            onLaunchFocusSession={handleLaunchFocusFromTracker}
+            isTimerRunning={isRunning}
             remainingMs={state.remainingMs}
-            totalDurationMs={state.totalDurationMs}
-            mode={state.mode}
-            status={state.status}
-            timerFormat={state.settings.timerFormat}
           />
         </div>
+      ) : (
+        <>
+          {/* Top Right Corner Quotes Widget */}
+          <aside
+            className={`${styles.topRightQuotes} ${isIdle ? styles.idleHidden : ''}`}
+            aria-label="Mindset Quote"
+          >
+            <Quotes intervalMs={7000} />
+          </aside>
 
-        <div className={styles.controlsWrapper}>
-          <Controls
-            status={state.status}
-            mode={state.mode}
-            completedInCycle={state.completedInCycle}
-            sessionsBeforeLongBreak={state.settings.sessionsBeforeLongBreak}
-            showSessionDots={state.settings.showSessionDots}
-            onStart={actions.start}
-            onPause={actions.pause}
-            onResume={actions.resume}
-            onReset={handleReset}
-            onSkip={handleSkip}
+          {/* Main hero stage — optical vertical centering */}
+          <main className={styles.mainStage} id="timer-main">
+            <div className={styles.topSpacer} aria-hidden="true" />
+            <div className={styles.heroWrapper}>
+              <TimerHero
+                remainingMs={state.remainingMs}
+                totalDurationMs={state.totalDurationMs}
+                mode={state.mode}
+                status={state.status}
+                timerFormat={state.settings.timerFormat}
+              />
+            </div>
+
+            <div className={styles.controlsWrapper}>
+              <Controls
+                status={state.status}
+                mode={state.mode}
+                completedInCycle={state.completedInCycle}
+                sessionsBeforeLongBreak={state.settings.sessionsBeforeLongBreak}
+                showSessionDots={state.settings.showSessionDots}
+                onStart={actions.start}
+                onPause={actions.pause}
+                onResume={actions.resume}
+                onReset={handleReset}
+                onSkip={handleSkip}
+              />
+            </div>
+          </main>
+
+          {/* Bottom ambient status bar */}
+          <Footer
+            stats={state.stats}
+            isIdle={isIdle}
+            onFullscreen={toggleFullscreen}
+            onStatsOpen={() => setStatsOpen(true)}
           />
-        </div>
-      </main>
-
-      {/* Bottom ambient status bar */}
-      <Footer
-        stats={state.stats}
-        isIdle={isIdle}
-        onFullscreen={toggleFullscreen}
-        onStatsOpen={() => setStatsOpen(true)}
-      />
+        </>
+      )}
 
       {/* Settings Modal Component */}
       <SettingsModal

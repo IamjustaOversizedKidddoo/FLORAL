@@ -159,15 +159,25 @@ export function clearFocusIntent(): void {
 /**
  * Launch CHRONOS timer with associated study/task intent
  */
-export function launchChronosTimer(task: string, subject: string, dayNumber: number): void {
-  setFocusIntent({
+export function launchChronosTimer(
+  task: string,
+  subject: string,
+  dayNumber: number,
+  onLaunchCallback?: (intent: FocusIntent) => void
+): void {
+  const intent: FocusIntent = {
     task,
     subject,
     dayNumber,
     createdAt: Date.now(),
-  });
-  // Navigate to root CHRONOS timer
-  window.location.href = `/?task=${encodeURIComponent(task)}&subject=${encodeURIComponent(subject)}&source=daggers`;
+  };
+  setFocusIntent(intent);
+  if (onLaunchCallback) {
+    onLaunchCallback(intent);
+  } else {
+    // Fallback if accessed standalone
+    window.location.href = `/?task=${encodeURIComponent(task)}&subject=${encodeURIComponent(subject)}&source=daggers`;
+  }
 }
 
 /**

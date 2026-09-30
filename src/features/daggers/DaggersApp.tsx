@@ -13,10 +13,22 @@ import { Sidebar } from './components/Sidebar/Sidebar';
 import { ProgrammePage } from './components/ProgrammePage/ProgrammePage';
 import { AnalyticsPage } from './components/AnalyticsPage/AnalyticsPage';
 import { SettingsPage } from './components/SettingsPage/SettingsPage';
-import { subscribeToChronosUpdates } from './services/chronosIntegrationService';
+import { subscribeToChronosUpdates, type FocusIntent } from './services/chronosIntegrationService';
 import { syncWithChronosSessions } from './storageService';
 
-export function DaggersApp() {
+export interface DaggersAppProps {
+  onSwitchToTimer?: () => void;
+  onLaunchFocusSession?: (intent: FocusIntent) => void;
+  isTimerRunning?: boolean;
+  remainingMs?: number;
+}
+
+export function DaggersApp({
+  onSwitchToTimer,
+  onLaunchFocusSession,
+  isTimerRunning,
+  remainingMs = 0,
+}: DaggersAppProps = {}) {
   const {
     store,
     days,
@@ -63,6 +75,9 @@ export function DaggersApp() {
         overallProgress={overallProgress}
         activeTab={activeTab}
         onSelectTab={setActiveTab}
+        onSwitchToTimer={onSwitchToTimer}
+        isTimerRunning={isTimerRunning}
+        remainingMs={remainingMs}
       />
 
       {activeTab === 'DASHBOARD' && (
@@ -91,6 +106,7 @@ export function DaggersApp() {
               entry={selectedEntry}
               dayNumber={displayDayNumber}
               onUpdate={handleUpdate}
+              onLaunchFocusSession={onLaunchFocusSession}
             />
           </main>
         </div>

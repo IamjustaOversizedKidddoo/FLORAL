@@ -12,12 +12,13 @@ import type {
 import { SSB_ACTIVITY_LABELS, STUDY_SUBJECT_LABELS, MOOD_LABELS, SCORE_WEIGHTS } from '../../constants';
 import { getCurriculumForDay } from '../../data/programmeData';
 import { PhaseBadge } from '../PhaseBadge/PhaseBadge';
-import { getFocusSessionsForDate, launchChronosTimer } from '../../services/chronosIntegrationService';
+import { getFocusSessionsForDate, launchChronosTimer, type FocusIntent } from '../../services/chronosIntegrationService';
 
 interface DayDetailProps {
   entry: DayEntry | undefined;
   dayNumber: number;
   onUpdate: (patch: Partial<DayEntry>) => void;
+  onLaunchFocusSession?: (intent: FocusIntent) => void;
 }
 
 // ---- Sub-components ----
@@ -393,12 +394,14 @@ function ChronosFocusCard({
   defaultSubject,
   defaultTask,
   focusMinutes,
+  onLaunchFocusSession,
 }: {
   date: string;
   dayNumber: number;
   defaultSubject?: string;
   defaultTask?: string;
   focusMinutes: number;
+  onLaunchFocusSession?: (intent: FocusIntent) => void;
 }) {
   const sessions = getFocusSessionsForDate(date);
   const subject = defaultSubject || 'MILITARY_HISTORY';
@@ -427,7 +430,7 @@ function ChronosFocusCard({
             type="button"
             className={styles.completeAllBtn}
             style={{ alignSelf: 'flex-start' }}
-            onClick={() => launchChronosTimer(task, subject, dayNumber)}
+            onClick={() => launchChronosTimer(task, subject, dayNumber, onLaunchFocusSession)}
           >
             ▶ Launch CHRONOS Focus Timer
           </button>
@@ -457,7 +460,12 @@ function ChronosFocusCard({
 
 // ---- Main DayDetail component ----
 
-export function DayDetail({ entry, dayNumber, onUpdate }: DayDetailProps) {
+export function DayDetail({
+  entry,
+  dayNumber,
+  onUpdate,
+  onLaunchFocusSession,
+}: DayDetailProps) {
   const [draft, setDraft] = useState<Partial<DayEntry>>({});
   const [saved, setSaved] = useState(false);
 
@@ -763,6 +771,7 @@ export function DayDetail({ entry, dayNumber, onUpdate }: DayDetailProps) {
         defaultSubject={curriculum.studyTask.subject}
         defaultTask={curriculum.studyTask.topic}
         focusMinutes={entry.chronosFocusMinutes}
+        onLaunchFocusSession={onLaunchFocusSession}
       />
 
       {/* Four pillars logging cards */}

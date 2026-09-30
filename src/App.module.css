@@ -162,3 +162,13 @@
     display: none;
   }
 }
+
+.daggersContainer {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-modal, 20);
+  background: var(--bg-canvas, #000);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}

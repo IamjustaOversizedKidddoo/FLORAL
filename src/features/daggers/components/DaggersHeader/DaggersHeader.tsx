@@ -15,6 +15,9 @@ interface DaggersHeaderProps {
   overallProgress: number;
   activeTab: DaggersTab;
   onSelectTab: (tab: DaggersTab) => void;
+  onSwitchToTimer?: () => void;
+  isTimerRunning?: boolean;
+  remainingMs?: number;
 }
 
 export function DaggersHeader({
@@ -23,6 +26,9 @@ export function DaggersHeader({
   overallProgress,
   activeTab,
   onSelectTab,
+  onSwitchToTimer,
+  isTimerRunning,
+  remainingMs = 0,
 }: DaggersHeaderProps) {
   const daysRemaining = Math.max(0, TOTAL_DAYS - currentDayNumber);
   const displayDay = Math.max(0, Math.min(currentDayNumber, TOTAL_DAYS));
@@ -149,13 +155,29 @@ export function DaggersHeader({
 
       {/* Right: CHRONOS link */}
       <div className={styles.right}>
-        <a href="/" className={styles.chronosLink} title="Open CHRONOS Focus Timer">
+        <button
+          type="button"
+          onClick={() => {
+            if (onSwitchToTimer) {
+              onSwitchToTimer();
+            } else {
+              window.location.href = '/';
+            }
+          }}
+          className={styles.chronosLink}
+          title="Open CHRONOS Focus Timer"
+        >
           <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
             <circle cx="6" cy="6" r="4.5" />
             <polyline points="6,3 6,6 8,7" />
           </svg>
-          CHRONOS Timer
-        </a>
+          <span>CHRONOS Timer</span>
+          {isTimerRunning && (
+            <span style={{ color: '#fff', fontWeight: 700, marginLeft: 4 }}>
+              ▶ {Math.floor(remainingMs / 60000)}:{String(Math.floor((remainingMs % 60000) / 1000)).padStart(2, '0')}
+            </span>
+          )}
+        </button>
       </div>
     </header>
   );

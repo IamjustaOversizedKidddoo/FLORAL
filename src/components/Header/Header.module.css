@@ -18,9 +18,67 @@
   opacity: 1;
 }
 
-.brandSpacer {
-  /* Intentional negative space on top-left */
-  width: 32px;
+.leftNav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.viewNavBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 4px 10px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: all var(--duration-fast) var(--ease-linear);
+  outline: none;
+}
+
+.viewNavBtn:hover {
+  color: var(--text-secondary);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.viewNavBtn.viewNavActive {
+  color: var(--text-hero);
+  border-color: rgba(196, 168, 130, 0.3);
+  background: rgba(196, 168, 130, 0.08);
+  font-weight: 700;
+}
+
+.viewDivider {
+  color: rgba(255, 255, 255, 0.15);
+  font-size: var(--text-xs);
+  user-select: none;
+}
+
+.daggerMiniIcon {
+  width: 11px;
+  height: 11px;
+  opacity: 0.9;
+  flex-shrink: 0;
+}
+
+.activeTimerBadge {
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  color: var(--mode-accent, #c4a882);
+  margin-left: 2px;
+  animation: pulseTimer 2s infinite ease-in-out;
+}
+
+@keyframes pulseTimer {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
 }
 
 /* ----------------------------------------------------------
