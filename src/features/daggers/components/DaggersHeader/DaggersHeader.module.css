@@ -1,0 +1,216 @@
+/* ============================================================
+   DAGGERS HEADER
+   ============================================================ */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--d-space-4) var(--d-space-6);
+  border-bottom: 1px solid var(--d-border-subtle);
+  background: rgba(8, 10, 11, 0.96);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: var(--d-z-panel);
+  gap: var(--d-space-4);
+  flex-wrap: wrap;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: var(--d-space-4);
+  min-width: 0;
+}
+
+.insigniaBadge {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 8px rgba(196, 168, 130, 0.25));
+}
+
+.titles {
+  min-width: 0;
+}
+
+.unitName {
+  font-size: 0.65rem;
+  font-family: var(--d-font-mono);
+  letter-spacing: 0.18em;
+  color: var(--d-accent-bright);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.programmeTitle {
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--d-text-hero);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.candidateTag {
+  font-family: var(--d-font-mono);
+  font-size: 0.65rem;
+  color: var(--d-accent);
+  letter-spacing: 0.08em;
+}
+
+/* Navigation tabs in center-right */
+.navTabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 3px;
+  border-radius: var(--d-radius-sm);
+  border: 1px solid var(--d-border-subtle);
+}
+
+.navBtn {
+  background: transparent;
+  border: none;
+  color: var(--d-text-muted);
+  font-family: var(--d-font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: var(--d-space-2) var(--d-space-3);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--d-space-2);
+}
+
+.navBtn:hover {
+  color: var(--d-text-primary);
+}
+
+.navBtn.navActive {
+  background: var(--d-accent);
+  color: #fff;
+}
+
+/* Centre: day counter */
+.centre {
+  display: flex;
+  align-items: center;
+  gap: var(--d-space-3);
+  flex-shrink: 0;
+}
+
+.dayCounter {
+  text-align: center;
+}
+
+.dayNum {
+  font-family: var(--d-font-mono);
+  font-size: 1.75rem;
+  font-weight: 400;
+  color: var(--d-accent-bright);
+  line-height: 1;
+  letter-spacing: 0.04em;
+}
+
+.dayLabel {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: var(--d-text-muted);
+  text-transform: uppercase;
+  margin-top: var(--d-space-1);
+}
+
+.separator {
+  width: 1px;
+  height: 32px;
+  background: var(--d-border-subtle);
+}
+
+.progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--d-space-1);
+}
+
+.progressRing {
+  position: relative;
+  width: 44px;
+  height: 44px;
+}
+
+.progressRing svg {
+  transform: rotate(-90deg);
+}
+
+.progressRing circle {
+  transition: stroke-dashoffset var(--d-duration-normal) var(--d-ease-smooth);
+}
+
+.progressText {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--d-font-mono);
+  font-size: 0.65rem;
+  color: var(--d-accent-bright);
+}
+
+.progressLabel {
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  color: var(--d-text-muted);
+  text-transform: uppercase;
+}
+
+/* Right: nav links */
+.right {
+  display: flex;
+  align-items: center;
+  gap: var(--d-space-3);
+}
+
+.chronosLink {
+  display: flex;
+  align-items: center;
+  gap: var(--d-space-2);
+  padding: var(--d-space-2) var(--d-space-3);
+  border: 1px solid var(--d-border-subtle);
+  border-radius: var(--d-radius-md);
+  font-size: 0.7rem;
+  font-family: var(--d-font-mono);
+  letter-spacing: 0.1em;
+  color: var(--d-accent-bright);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all var(--d-duration-fast) var(--d-ease-smooth);
+}
+
+.chronosLink:hover {
+  border-color: var(--d-accent);
+  color: #fff;
+  background: rgba(196, 168, 130, 0.1);
+}
+
+.chronosLink svg {
+  width: 12px;
+  height: 12px;
+  opacity: 0.8;
+}
+
+@media (max-width: 860px) {
+  .header { padding: var(--d-space-3) var(--d-space-4); }
+  .centre { display: none; }
+  .programmeTitle { font-size: 0.75rem; }
+}

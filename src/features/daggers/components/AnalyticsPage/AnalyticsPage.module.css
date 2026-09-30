@@ -1,0 +1,263 @@
+/* ============================================================
+   ANALYTICS PAGE — High-fidelity military command telemetry
+   ============================================================ */
+
+.page {
+  padding: var(--d-space-6) var(--d-space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-space-6);
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.pageHeader {
+  border-bottom: 1px solid var(--d-border-subtle);
+  padding-bottom: var(--d-space-4);
+}
+
+.pageTitle {
+  font-family: var(--d-font-mono);
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--d-text-primary);
+  margin: 0 0 var(--d-space-1) 0;
+}
+
+.pageSubtitle {
+  font-size: 0.85rem;
+  color: var(--d-text-muted);
+  margin: 0;
+}
+
+/* KPI Grid */
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--d-space-4);
+}
+
+@media (max-width: 850px) {
+  .kpiGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .kpiGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.kpiCard {
+  background: var(--d-bg-surface);
+  border: 1px solid var(--d-border-subtle);
+  border-radius: var(--d-radius-md);
+  padding: var(--d-space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-space-1);
+}
+
+.kpiLabel {
+  font-family: var(--d-font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--d-text-muted);
+}
+
+.kpiValue {
+  font-family: var(--d-font-mono);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--d-accent-bright);
+  line-height: 1.1;
+}
+
+.kpiSub {
+  font-size: 0.7rem;
+  color: var(--d-text-secondary);
+}
+
+/* Section Cards */
+.sectionCard {
+  background: var(--d-bg-surface);
+  border: 1px solid var(--d-border-subtle);
+  border-radius: var(--d-radius-lg);
+  padding: var(--d-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-space-4);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--d-border-subtle);
+  padding-bottom: var(--d-space-3);
+}
+
+.sectionTitle {
+  font-family: var(--d-font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--d-text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--d-space-2);
+}
+
+/* Weekly Table */
+.weeklyTableContainer {
+  overflow-x: auto;
+}
+
+.weeklyTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  text-align: left;
+}
+
+.weeklyTable th {
+  font-family: var(--d-font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--d-text-muted);
+  padding: var(--d-space-2) var(--d-space-3);
+  border-bottom: 1px solid var(--d-border-medium);
+}
+
+.weeklyTable td {
+  padding: var(--d-space-3);
+  border-bottom: 1px solid var(--d-border-subtle);
+  color: var(--d-text-secondary);
+}
+
+.weekProgressTrack {
+  width: 100px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.weekProgressFill {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--d-accent);
+}
+
+/* Multi-column grid for breakdown lists */
+.breakdownGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--d-space-4);
+}
+
+@media (max-width: 850px) {
+  .breakdownGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.breakdownCol {
+  background: var(--d-bg-surface-2);
+  border: 1px solid var(--d-border-subtle);
+  border-radius: var(--d-radius-md);
+  padding: var(--d-space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-space-3);
+}
+
+.breakdownTitle {
+  font-family: var(--d-font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--d-accent-bright);
+}
+
+.statList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-space-2);
+}
+
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.statName {
+  color: var(--d-text-muted);
+}
+
+.statVal {
+  font-family: var(--d-font-mono);
+  color: var(--d-text-primary);
+  font-weight: 600;
+}
+
+/* CHRONOS Sessions List */
+.sessionsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-space-2);
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.sessionItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--d-space-2) var(--d-space-3);
+  background: var(--d-bg-surface-2);
+  border: 1px solid var(--d-border-subtle);
+  border-radius: var(--d-radius-sm);
+  font-size: 0.75rem;
+}
+
+.sessionLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--d-space-2);
+}
+
+.sessionBadge {
+  font-family: var(--d-font-mono);
+  font-size: 0.65rem;
+  padding: 1px 6px;
+  border-radius: 2px;
+  background: rgba(74, 124, 95, 0.2);
+  color: #88c999;
+}
+
+.sessionTime {
+  color: var(--d-text-muted);
+  font-family: var(--d-font-mono);
+}
+
+.sessionDuration {
+  font-family: var(--d-font-mono);
+  font-weight: 700;
+  color: var(--d-accent-bright);
+}

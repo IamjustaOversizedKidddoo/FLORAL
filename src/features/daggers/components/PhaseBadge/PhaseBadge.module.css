@@ -1,0 +1,33 @@
+/* ============================================================
+   PHASE BADGE
+   ============================================================ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border: 1px solid var(--phase-color, var(--d-accent));
+  border-radius: 2px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--phase-color, var(--d-accent));
+  background: color-mix(in srgb, var(--phase-color, var(--d-accent)) 12%, transparent);
+  white-space: nowrap;
+}
+
+.compact {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  border: 1px solid var(--phase-color, var(--d-accent));
+  border-radius: 2px;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--phase-color, var(--d-accent));
+  background: color-mix(in srgb, var(--phase-color, var(--d-accent)) 10%, transparent);
+  white-space: nowrap;
+}

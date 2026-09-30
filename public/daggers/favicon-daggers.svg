@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="#0a0b0c"/>
+  <!-- Dagger blade -->
+  <path d="M16 3 L17.5 12 L20 14 L17.5 16 L17.5 28 L16 30 L14.5 28 L14.5 16 L12 14 L14.5 12 Z"
+        fill="#C4A882" opacity="0.9"/>
+  <!-- Tip highlight -->
+  <path d="M16 3 L16.8 7 L16 8.5 L15.2 7 Z" fill="#F0EBE0"/>
+  <!-- Wings -->
+  <path d="M12 14 L5 10.5 L10 14 L5 17.5 Z" fill="#9B8364" opacity="0.75"/>
+  <path d="M20 14 L27 10.5 L22 14 L27 17.5 Z" fill="#9B8364" opacity="0.75"/>
+</svg>

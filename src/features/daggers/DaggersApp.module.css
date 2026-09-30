@@ -1,0 +1,70 @@
+/* ============================================================
+   DAGGERS APP SHELL — Root layout
+   ============================================================ */
+
+.shell {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 100dvh;
+  background: var(--d-bg-canvas-gradient);
+  background-color: var(--d-bg-canvas);
+  animation: d-page-reveal var(--d-duration-slow) var(--d-ease-smooth) forwards;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ambient scan-line effect — subtle atmospheric layer */
+.shell::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.04) 2px,
+    rgba(0, 0, 0, 0.04) 4px
+  );
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 0;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  z-index: var(--d-z-base);
+}
+
+/* Sidebar */
+.sidebar {
+  border-right: 1px solid var(--d-border-subtle);
+  background: var(--d-bg-surface);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main panel */
+.main {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+  .content {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid var(--d-border-subtle);
+    overflow-y: visible;
+  }
+}

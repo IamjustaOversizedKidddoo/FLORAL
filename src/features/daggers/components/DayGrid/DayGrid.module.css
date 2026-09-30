@@ -1,0 +1,177 @@
+/* ============================================================
+   DAY GRID — 90-day compact calendar with phase filtering
+   ============================================================ */
+
+.wrapper {
+  padding: var(--d-space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-space-4);
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--d-space-3);
+  flex-wrap: wrap;
+}
+
+.sectionTitle {
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  color: var(--d-text-muted);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: var(--d-space-3);
+  margin: 0;
+  font-family: var(--d-font-mono);
+}
+
+.phaseFilterBar {
+  display: flex;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 3px;
+  border-radius: var(--d-radius-sm);
+  border: 1px solid var(--d-border-subtle);
+}
+
+.phaseFilterBtn {
+  background: transparent;
+  border: none;
+  color: var(--d-text-muted);
+  font-family: var(--d-font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+}
+
+.phaseFilterBtn:hover {
+  color: var(--d-text-primary);
+}
+
+.phaseFilterBtn.activeFilter {
+  background: var(--d-accent);
+  color: #fff;
+  font-weight: 700;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* Individual day cell */
+.cell {
+  aspect-ratio: 1;
+  border-radius: var(--d-radius-xs);
+  position: relative;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition:
+    transform var(--d-duration-fast) var(--d-ease-smooth),
+    border-color var(--d-duration-fast) var(--d-ease-smooth),
+    box-shadow var(--d-duration-fast) var(--d-ease-smooth);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.cell:hover {
+  transform: scale(1.15);
+  z-index: 2;
+  border-color: var(--d-border-medium);
+  box-shadow: var(--d-shadow-elevated);
+}
+
+.cell:focus-visible {
+  outline: 2px solid var(--d-border-focus);
+  outline-offset: 2px;
+}
+
+/* Status variants */
+.cell.locked {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.04);
+  opacity: 0.7;
+}
+
+.cell.locked:hover {
+  border-color: rgba(196, 168, 130, 0.3);
+  opacity: 1;
+}
+
+.cell.missed {
+  background: rgba(139, 46, 46, 0.15);
+  border-color: rgba(139, 46, 46, 0.3);
+}
+
+.cell.active {
+  background: rgba(196, 168, 130, 0.15);
+  border-color: var(--d-accent-bright);
+  box-shadow: 0 0 10px rgba(196, 168, 130, 0.3);
+}
+
+.cell.selected {
+  outline: 2px solid var(--d-accent-bright);
+  outline-offset: 1px;
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.dayNum {
+  position: relative;
+  z-index: 1;
+  font-family: var(--d-font-mono);
+  font-size: 0.7rem;
+  color: var(--d-text-secondary);
+}
+
+.cell.active .dayNum {
+  color: var(--d-accent-bright);
+  font-weight: 700;
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  align-items: center;
+  gap: var(--d-space-4);
+  flex-wrap: wrap;
+  padding-top: var(--d-space-2);
+  border-top: 1px solid var(--d-border-subtle);
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: var(--d-space-2);
+  font-size: 0.65rem;
+  color: var(--d-text-muted);
+  font-family: var(--d-font-mono);
+}
+
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}

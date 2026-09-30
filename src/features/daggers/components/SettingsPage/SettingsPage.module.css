@@ -1,0 +1,284 @@
+/* ============================================================
+   SETTINGS PAGE — Configuration, Backup & Danger Zone
+   ============================================================ */
+
+.page {
+  padding: var(--d-space-6) var(--d-space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-space-6);
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.pageHeader {
+  border-bottom: 1px solid var(--d-border-subtle);
+  padding-bottom: var(--d-space-4);
+}
+
+.pageTitle {
+  font-family: var(--d-font-mono);
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--d-text-primary);
+  margin: 0 0 var(--d-space-1) 0;
+}
+
+.pageSubtitle {
+  font-size: 0.85rem;
+  color: var(--d-text-muted);
+  margin: 0;
+}
+
+.card {
+  background: var(--d-bg-surface);
+  border: 1px solid var(--d-border-subtle);
+  border-radius: 4px;
+  padding: var(--d-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-space-4);
+}
+
+.cardTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--d-space-2);
+  font-family: var(--d-font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--d-text-primary);
+}
+
+.cardTitle svg {
+  width: 14px;
+  height: 14px;
+  color: var(--d-accent-bright);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-space-4);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-space-1);
+}
+
+.fieldLabel {
+  font-family: var(--d-font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--d-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.optional {
+  color: var(--d-text-muted);
+  font-weight: 400;
+  text-transform: none;
+}
+
+.fieldHint {
+  font-size: 0.75rem;
+  color: var(--d-text-muted);
+  margin: 0 0 var(--d-space-1) 0;
+}
+
+.input {
+  background: var(--d-bg-surface-2);
+  border: 1px solid var(--d-border-subtle);
+  color: var(--d-text-primary);
+  font-family: var(--d-font-mono);
+  font-size: 0.875rem;
+  padding: var(--d-space-2) var(--d-space-3);
+  border-radius: 3px;
+  outline: none;
+  transition: border-color 0.15s ease;
+  max-width: 320px;
+}
+
+.input:focus {
+  border-color: var(--d-accent);
+}
+
+.saveBtn {
+  align-self: flex-start;
+  background: var(--d-accent);
+  color: #fff;
+  border: 1px solid var(--d-accent-bright);
+  font-family: var(--d-font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: var(--d-space-2) var(--d-space-4);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.saveBtn:hover {
+  background: var(--d-accent-bright);
+  color: #0b0c0e;
+}
+
+.saveBtn.saved {
+  background: #2e7d32;
+  border-color: #4caf50;
+  color: #fff;
+}
+
+/* Backup & Restore */
+.backupActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-space-4);
+}
+
+.backupRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--d-space-4);
+  padding: var(--d-space-3) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.backupDesc {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.backupTitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--d-text-primary);
+}
+
+.backupSub {
+  font-size: 0.75rem;
+  color: var(--d-text-muted);
+}
+
+.actionBtn {
+  background: var(--d-bg-surface-2);
+  color: var(--d-text-primary);
+  border: 1px solid var(--d-border-subtle);
+  font-family: var(--d-font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: var(--d-space-2) var(--d-space-4);
+  border-radius: 3px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.actionBtn:hover {
+  border-color: var(--d-accent);
+  color: var(--d-accent-bright);
+}
+
+.warningBox {
+  background: rgba(200, 168, 75, 0.08);
+  border-left: 3px solid #c8a84b;
+  padding: var(--d-space-3);
+  font-size: 0.75rem;
+  color: #e6dfcb;
+  line-height: 1.4;
+}
+
+.alertDanger {
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  padding: var(--d-space-3);
+  border-radius: 3px;
+  font-size: 0.8rem;
+  color: #fca5a5;
+}
+
+.alertSuccess {
+  background: rgba(46, 125, 50, 0.1);
+  border: 1px solid rgba(46, 125, 50, 0.3);
+  padding: var(--d-space-3);
+  border-radius: 3px;
+  font-size: 0.8rem;
+  color: #86efac;
+}
+
+.infoGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-space-2);
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--d-space-2) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.8rem;
+}
+
+.infoLabel {
+  font-family: var(--d-font-mono);
+  color: var(--d-text-muted);
+}
+
+.infoValue {
+  color: var(--d-text-secondary);
+  font-weight: 500;
+  font-family: var(--d-font-mono);
+  font-size: 0.75rem;
+}
+
+.dangerCard {
+  border-color: rgba(220, 38, 38, 0.3);
+  background: rgba(220, 38, 38, 0.03);
+}
+
+.dangerText {
+  font-size: 0.8rem;
+  color: var(--d-text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.resetBtn {
+  align-self: flex-start;
+  background: transparent;
+  color: var(--d-danger, #ef4444);
+  border: 1px solid var(--d-danger, #ef4444);
+  font-family: var(--d-font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: var(--d-space-2) var(--d-space-4);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resetBtn:hover {
+  background: rgba(220, 38, 38, 0.1);
+}
+
+.resetConfirm {
+  background: var(--d-danger, #ef4444) !important;
+  color: #fff !important;
+}

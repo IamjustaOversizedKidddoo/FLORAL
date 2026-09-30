@@ -1,0 +1,134 @@
+/* ============================================================
+   SIDEBAR OVERVIEW — weekly summary + config
+   ============================================================ */
+
+.sidebar {
+  padding: var(--d-space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-space-6);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-space-3);
+}
+
+.sectionTitle {
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
+  color: var(--d-text-muted);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: var(--d-space-2);
+}
+
+.sectionTitle::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--d-border-subtle);
+}
+
+/* ---- Stat rows ---- */
+.statRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--d-space-2) 0;
+  border-bottom: 1px solid var(--d-border-subtle);
+}
+
+.statLabel {
+  font-size: 0.7rem;
+  color: var(--d-text-secondary);
+  letter-spacing: 0.05em;
+}
+
+.statValue {
+  font-family: var(--d-font-mono);
+  font-size: 0.8rem;
+  color: var(--d-accent-bright);
+  letter-spacing: 0.04em;
+}
+
+/* ---- Weekly bars ---- */
+.weekBar {
+  display: flex;
+  align-items: center;
+  gap: var(--d-space-3);
+  margin-bottom: var(--d-space-2);
+}
+
+.weekLabel {
+  font-family: var(--d-font-mono);
+  font-size: 0.6rem;
+  color: var(--d-text-muted);
+  width: 32px;
+  flex-shrink: 0;
+}
+
+.weekTrack {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.weekFill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width var(--d-duration-normal) var(--d-ease-smooth);
+}
+
+.weekScore {
+  font-family: var(--d-font-mono);
+  font-size: 0.6rem;
+  color: var(--d-text-muted);
+  width: 28px;
+  text-align: right;
+}
+
+/* ---- CHRONOS panel ---- */
+.chronosCard {
+  border: 1px solid var(--d-border-subtle);
+  border-radius: var(--d-radius-md);
+  padding: var(--d-space-4);
+  background: var(--d-bg-surface-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-space-2);
+}
+
+.chronosCardTitle {
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  color: var(--d-text-muted);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: var(--d-space-2);
+}
+
+.chronosCardTitle svg {
+  width: 10px;
+  height: 10px;
+  color: var(--d-accent);
+}
+
+.chronosMinutes {
+  font-family: var(--d-font-mono);
+  font-size: 1.5rem;
+  color: var(--d-accent-bright);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.chronosSub {
+  font-size: 0.65rem;
+  color: var(--d-text-muted);
+  letter-spacing: 0.06em;
+}

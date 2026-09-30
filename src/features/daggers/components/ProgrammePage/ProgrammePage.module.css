@@ -1,0 +1,297 @@
+/* ============================================================
+   PROGRAMME PAGE — 90-day plan layout
+   ============================================================ */
+
+.page {
+  padding: var(--d-space-6) var(--d-space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-space-8);
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  animation: d-page-reveal var(--d-duration-normal) var(--d-ease-smooth) forwards;
+}
+
+/* ---- Page header ---- */
+.pageHeader {
+  padding-bottom: var(--d-space-6);
+  border-bottom: 1px solid var(--d-border-subtle);
+}
+
+.pageTitle {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--d-text-secondary);
+  text-transform: uppercase;
+  margin-bottom: var(--d-space-2);
+}
+
+.pageSubtitle {
+  font-size: 0.8rem;
+  color: var(--d-text-muted);
+  letter-spacing: 0.04em;
+}
+
+/* ---- Phase cards ---- */
+.phases {
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-space-6);
+}
+
+.phaseCard {
+  border: 1px solid var(--d-border-subtle);
+  border-radius: var(--d-radius-lg);
+  background: var(--d-bg-surface);
+  overflow: hidden;
+  transition: border-color var(--d-duration-normal) var(--d-ease-smooth);
+}
+
+.phaseCard.phaseActive {
+  border-color: color-mix(in srgb, var(--phase-accent) 40%, transparent);
+}
+
+.phaseCard.phasePast {
+  opacity: 0.65;
+}
+
+/* Phase header row */
+.phaseHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--d-space-4) var(--d-space-6);
+  background: color-mix(in srgb, var(--phase-accent) 8%, var(--d-bg-surface-2));
+  border-bottom: 1px solid var(--d-border-subtle);
+}
+
+.phaseTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--d-space-4);
+}
+
+.phaseStripe {
+  width: 3px;
+  height: 32px;
+  border-radius: 2px;
+  background: var(--phase-accent, var(--d-accent));
+  flex-shrink: 0;
+}
+
+.phaseName {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--d-text-hero);
+  text-transform: uppercase;
+}
+
+.phaseDays {
+  font-size: 0.6rem;
+  color: var(--d-text-muted);
+  letter-spacing: 0.12em;
+  margin-top: 2px;
+}
+
+.activePill {
+  padding: 3px 10px;
+  border-radius: 2px;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--phase-accent, var(--d-accent));
+  background: color-mix(in srgb, var(--phase-accent) 14%, transparent);
+  border: 1px solid var(--phase-accent, var(--d-accent));
+}
+
+.pastPill {
+  padding: 3px 10px;
+  border-radius: 2px;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--d-success);
+  background: var(--d-success-dim);
+  border: 1px solid var(--d-success);
+}
+
+/* Phase description */
+.phaseDesc {
+  padding: var(--d-space-4) var(--d-space-6);
+  font-size: 0.8rem;
+  color: var(--d-text-secondary);
+  line-height: 1.7;
+  border-bottom: 1px solid var(--d-border-subtle);
+}
+
+/* Phase content grid */
+.phaseGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  padding: var(--d-space-4) var(--d-space-6);
+}
+
+.phaseSection {
+  padding: var(--d-space-3);
+  border-right: 1px solid var(--d-border-subtle);
+  border-bottom: 1px solid var(--d-border-subtle);
+}
+
+.phaseSection:nth-child(even) {
+  border-right: none;
+}
+
+.phaseSection:nth-child(n+3) {
+  border-bottom: none;
+}
+
+.phaseSectionTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--d-space-2);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--d-text-secondary);
+  text-transform: uppercase;
+  margin-bottom: var(--d-space-3);
+}
+
+.phaseSectionIcon {
+  display: flex;
+  align-items: center;
+  width: 12px;
+  height: 12px;
+  color: var(--phase-accent, var(--d-accent));
+  flex-shrink: 0;
+}
+
+.phaseSectionList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-space-1);
+}
+
+.phaseSectionItem {
+  display: flex;
+  gap: var(--d-space-2);
+  font-size: 0.72rem;
+  color: var(--d-text-secondary);
+  line-height: 1.5;
+}
+
+.itemBullet {
+  color: var(--d-text-muted);
+  flex-shrink: 0;
+  margin-top: 1px;
+  font-size: 0.65rem;
+}
+
+/* Milestones */
+.milestones {
+  padding: var(--d-space-4) var(--d-space-6);
+  border-top: 1px solid var(--d-border-subtle);
+  background: color-mix(in srgb, var(--phase-accent) 4%, transparent);
+}
+
+.milestonesTitle {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--d-text-muted);
+  text-transform: uppercase;
+  margin-bottom: var(--d-space-3);
+}
+
+.milestoneList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--d-space-2) var(--d-space-6);
+}
+
+.milestone {
+  display: flex;
+  align-items: center;
+  gap: var(--d-space-2);
+  font-size: 0.7rem;
+  color: var(--d-text-secondary);
+}
+
+.milestoneDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--phase-accent, var(--d-accent));
+  flex-shrink: 0;
+}
+
+/* ---- Reading section ---- */
+.readingCard {
+  border: 1px solid var(--d-border-subtle);
+  border-radius: var(--d-radius-lg);
+  background: var(--d-bg-surface);
+  padding: var(--d-space-6);
+}
+
+.sectionTitle {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--d-text-muted);
+  text-transform: uppercase;
+  margin-bottom: var(--d-space-4);
+}
+
+.readingGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--d-space-3);
+}
+
+.readingItem {
+  padding: var(--d-space-3);
+  background: var(--d-bg-surface-2);
+  border: 1px solid var(--d-border-subtle);
+  border-radius: var(--d-radius-md);
+  transition: border-color var(--d-duration-fast) var(--d-ease-smooth);
+}
+
+.readingItem:hover {
+  border-color: var(--d-border-medium);
+}
+
+.readingCat {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--d-accent);
+  text-transform: uppercase;
+  margin-bottom: var(--d-space-1);
+}
+
+.readingTitle {
+  font-size: 0.75rem;
+  color: var(--d-text-secondary);
+  line-height: 1.4;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+  .page { padding: var(--d-space-4); }
+  .phaseGrid { grid-template-columns: 1fr; }
+  .phaseSection { border-right: none; }
+  .phaseSection:nth-child(n) { border-right: none; }
+  .phaseSection:last-child { border-bottom: none; }
+}
+
+@media (max-width: 600px) {
+  .readingGrid { grid-template-columns: 1fr; }
+  .milestoneList { flex-direction: column; gap: var(--d-space-2); }
+}
