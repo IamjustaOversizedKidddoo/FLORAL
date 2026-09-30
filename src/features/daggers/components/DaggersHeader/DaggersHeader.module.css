@@ -36,9 +36,10 @@
 }
 
 .unitName {
-  font-size: 0.65rem;
+  font-size: var(--d-text-2xs);
   font-family: var(--d-font-mono);
-  letter-spacing: 0.18em;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   color: var(--d-accent-bright);
   text-transform: uppercase;
   white-space: nowrap;
@@ -47,7 +48,8 @@
 }
 
 .programmeTitle {
-  font-size: 0.875rem;
+  font-family: var(--d-font-display);
+  font-size: var(--d-text-base);
   font-weight: 700;
   letter-spacing: 0.08em;
   color: var(--d-text-hero);
@@ -57,7 +59,8 @@
 
 .candidateTag {
   font-family: var(--d-font-mono);
-  font-size: 0.65rem;
+  font-size: var(--d-text-2xs);
+  font-weight: 500;
   color: var(--d-accent);
   letter-spacing: 0.08em;
 }
@@ -77,10 +80,10 @@
   background: transparent;
   border: none;
   color: var(--d-text-muted);
-  font-family: var(--d-font-mono);
-  font-size: 0.75rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-xs);
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   padding: var(--d-space-2) var(--d-space-3);
   border-radius: 2px;
@@ -98,6 +101,7 @@
 .navBtn.navActive {
   background: var(--d-accent);
   color: #fff;
+  font-weight: 700;
 }
 
 /* Centre: day counter */
@@ -113,17 +117,19 @@
 }
 
 .dayNum {
-  font-family: var(--d-font-mono);
-  font-size: 1.75rem;
-  font-weight: 400;
+  font-family: var(--d-font-timer);
+  font-size: var(--d-text-3xl);
+  font-weight: 700;
   color: var(--d-accent-bright);
   line-height: 1;
   letter-spacing: 0.04em;
 }
 
 .dayLabel {
-  font-size: 0.6rem;
-  letter-spacing: 0.2em;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.16em;
   color: var(--d-text-muted);
   text-transform: uppercase;
   margin-top: var(--d-space-1);
@@ -163,13 +169,16 @@
   align-items: center;
   justify-content: center;
   font-family: var(--d-font-mono);
-  font-size: 0.65rem;
+  font-size: var(--d-text-xs);
+  font-weight: 600;
   color: var(--d-accent-bright);
 }
 
 .progressLabel {
-  font-size: 0.55rem;
-  letter-spacing: 0.15em;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.16em;
   color: var(--d-text-muted);
   text-transform: uppercase;
 }
@@ -190,9 +199,10 @@
   cursor: pointer;
   border: 1px solid var(--d-border-subtle);
   border-radius: var(--d-radius-md);
-  font-size: 0.7rem;
-  font-family: var(--d-font-mono);
-  letter-spacing: 0.1em;
+  font-size: var(--d-text-xs);
+  font-family: var(--d-font-sans);
+  font-weight: 600;
+  letter-spacing: 0.16em;
   color: var(--d-accent-bright);
   text-decoration: none;
   text-transform: uppercase;

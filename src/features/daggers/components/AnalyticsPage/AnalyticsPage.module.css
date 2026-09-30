@@ -18,17 +18,18 @@
 }
 
 .pageTitle {
-  font-family: var(--d-font-mono);
-  font-size: 1.25rem;
+  font-family: var(--d-font-display);
+  font-size: var(--d-text-xl);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   color: var(--d-text-primary);
   margin: 0 0 var(--d-space-1) 0;
 }
 
 .pageSubtitle {
-  font-size: 0.85rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
   color: var(--d-text-muted);
   margin: 0;
 }
@@ -63,23 +64,25 @@
 }
 
 .kpiLabel {
-  font-family: var(--d-font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--d-text-muted);
 }
 
 .kpiValue {
-  font-family: var(--d-font-mono);
-  font-size: 1.75rem;
+  font-family: var(--d-font-timer);
+  font-size: var(--d-text-3xl);
   font-weight: 700;
   color: var(--d-accent-bright);
   line-height: 1.1;
 }
 
 .kpiSub {
-  font-size: 0.7rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-xs);
   color: var(--d-text-secondary);
 }
 
@@ -103,9 +106,9 @@
 }
 
 .sectionTitle {
-  font-family: var(--d-font-mono);
-  font-size: 0.85rem;
-  font-weight: 700;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--d-text-primary);
@@ -122,14 +125,16 @@
 .weeklyTable {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.8rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
   text-align: left;
 }
 
 .weeklyTable th {
-  font-family: var(--d-font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--d-text-muted);
   padding: var(--d-space-2) var(--d-space-3);
@@ -183,9 +188,9 @@
 }
 
 .breakdownTitle {
-  font-family: var(--d-font-mono);
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-xs);
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--d-accent-bright);
@@ -201,7 +206,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.8rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
   padding-bottom: 4px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
@@ -212,6 +218,7 @@
 
 .statVal {
   font-family: var(--d-font-mono);
+  font-size: var(--d-text-sm);
   color: var(--d-text-primary);
   font-weight: 600;
 }
@@ -233,7 +240,8 @@
   background: var(--d-bg-surface-2);
   border: 1px solid var(--d-border-subtle);
   border-radius: var(--d-radius-sm);
-  font-size: 0.75rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
 }
 
 .sessionLeft {
@@ -244,7 +252,8 @@
 
 .sessionBadge {
   font-family: var(--d-font-mono);
-  font-size: 0.65rem;
+  font-size: var(--d-text-2xs);
+  font-weight: 600;
   padding: 1px 6px;
   border-radius: 2px;
   background: rgba(74, 124, 95, 0.2);
@@ -254,10 +263,12 @@
 .sessionTime {
   color: var(--d-text-muted);
   font-family: var(--d-font-mono);
+  font-size: var(--d-text-xs);
 }
 
 .sessionDuration {
   font-family: var(--d-font-mono);
+  font-size: var(--d-text-sm);
   font-weight: 700;
   color: var(--d-accent-bright);
 }

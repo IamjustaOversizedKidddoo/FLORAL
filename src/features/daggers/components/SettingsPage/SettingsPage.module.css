@@ -18,17 +18,18 @@
 }
 
 .pageTitle {
-  font-family: var(--d-font-mono);
-  font-size: 1.25rem;
+  font-family: var(--d-font-display);
+  font-size: var(--d-text-xl);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   color: var(--d-text-primary);
   margin: 0 0 var(--d-space-1) 0;
 }
 
 .pageSubtitle {
-  font-size: 0.85rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
   color: var(--d-text-muted);
   margin: 0;
 }
@@ -47,9 +48,9 @@
   display: flex;
   align-items: center;
   gap: var(--d-space-2);
-  font-family: var(--d-font-mono);
-  font-size: 0.85rem;
-  font-weight: 700;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--d-text-primary);
@@ -74,12 +75,12 @@
 }
 
 .fieldLabel {
-  font-family: var(--d-font-mono);
-  font-size: 0.8rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-2xs);
   font-weight: 600;
   color: var(--d-text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.12em;
 }
 
 .optional {
@@ -89,7 +90,8 @@
 }
 
 .fieldHint {
-  font-size: 0.75rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-xs);
   color: var(--d-text-muted);
   margin: 0 0 var(--d-space-1) 0;
 }
@@ -99,7 +101,7 @@
   border: 1px solid var(--d-border-subtle);
   color: var(--d-text-primary);
   font-family: var(--d-font-mono);
-  font-size: 0.875rem;
+  font-size: var(--d-text-base);
   padding: var(--d-space-2) var(--d-space-3);
   border-radius: 3px;
   outline: none;
@@ -116,11 +118,11 @@
   background: var(--d-accent);
   color: #fff;
   border: 1px solid var(--d-accent-bright);
-  font-family: var(--d-font-mono);
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-xs);
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.16em;
   padding: var(--d-space-2) var(--d-space-4);
   border-radius: 3px;
   cursor: pointer;
@@ -161,13 +163,15 @@
 }
 
 .backupTitle {
-  font-size: 0.85rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
   font-weight: 600;
   color: var(--d-text-primary);
 }
 
 .backupSub {
-  font-size: 0.75rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-xs);
   color: var(--d-text-muted);
 }
 
@@ -175,11 +179,11 @@
   background: var(--d-bg-surface-2);
   color: var(--d-text-primary);
   border: 1px solid var(--d-border-subtle);
-  font-family: var(--d-font-mono);
-  font-size: 0.75rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-xs);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   padding: var(--d-space-2) var(--d-space-4);
   border-radius: 3px;
   cursor: pointer;
@@ -196,7 +200,8 @@
   background: rgba(200, 168, 75, 0.08);
   border-left: 3px solid #c8a84b;
   padding: var(--d-space-3);
-  font-size: 0.75rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
   color: #e6dfcb;
   line-height: 1.4;
 }
@@ -206,7 +211,8 @@
   border: 1px solid rgba(220, 38, 38, 0.3);
   padding: var(--d-space-3);
   border-radius: 3px;
-  font-size: 0.8rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
   color: #fca5a5;
 }
 
@@ -215,7 +221,8 @@
   border: 1px solid rgba(46, 125, 50, 0.3);
   padding: var(--d-space-3);
   border-radius: 3px;
-  font-size: 0.8rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
   color: #86efac;
 }
 
@@ -231,19 +238,24 @@
   align-items: center;
   padding: var(--d-space-2) 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  font-size: 0.8rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
 }
 
 .infoLabel {
-  font-family: var(--d-font-mono);
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-2xs);
+  font-weight: 600;
   color: var(--d-text-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .infoValue {
   color: var(--d-text-secondary);
   font-weight: 500;
   font-family: var(--d-font-mono);
-  font-size: 0.75rem;
+  font-size: var(--d-text-xs);
 }
 
 .dangerCard {
@@ -252,7 +264,8 @@
 }
 
 .dangerText {
-  font-size: 0.8rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
   color: var(--d-text-muted);
   line-height: 1.5;
   margin: 0;
@@ -263,11 +276,11 @@
   background: transparent;
   color: var(--d-danger, #ef4444);
   border: 1px solid var(--d-danger, #ef4444);
-  font-family: var(--d-font-mono);
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-xs);
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.16em;
   padding: var(--d-space-2) var(--d-space-4);
   border-radius: 3px;
   cursor: pointer;

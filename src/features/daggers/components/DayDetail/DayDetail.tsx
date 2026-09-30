@@ -639,7 +639,7 @@ export function DayDetail({
                 style={{ transition: 'stroke-dashoffset 0.4s ease' }}
               />
             </g>
-            <text x="28" y="32" textAnchor="middle" fontSize="11" fontFamily="Share Tech Mono, monospace" fill="#C4A882">
+            <text x="28" y="32" textAnchor="middle" fontSize="11" fontWeight="600" fontFamily="var(--font-mono, monospace)" fill="#C4A882">
               {score}%
             </text>
           </svg>

@@ -30,15 +30,16 @@
 }
 
 .dayNumLarge {
-  font-family: var(--d-font-mono);
-  font-size: 2.75rem;
+  font-family: var(--d-font-timer);
+  font-size: var(--d-text-4xl);
+  font-weight: 700;
   color: var(--d-accent-bright);
   line-height: 1;
   letter-spacing: 0.04em;
 }
 
 .dayDate {
-  font-size: 0.8rem;
+  font-size: var(--d-text-xs);
   color: var(--d-text-muted);
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -53,9 +54,11 @@
 }
 
 .scoreLabel {
-  font-size: 0.6rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-2xs);
+  font-weight: 600;
   color: var(--d-text-muted);
-  letter-spacing: 0.15em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
@@ -94,7 +97,7 @@
 
 .weekBadge {
   font-family: var(--d-font-mono);
-  font-size: 0.7rem;
+  font-size: var(--d-text-2xs);
   padding: 2px 8px;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--d-border-subtle);
@@ -104,7 +107,8 @@
 }
 
 .missionTitle {
-  font-size: 1.1rem;
+  font-family: var(--d-font-display);
+  font-size: var(--d-text-lg);
   font-weight: 700;
   color: var(--d-text-hero);
   letter-spacing: 0.04em;
@@ -112,7 +116,8 @@
 }
 
 .missionTheme {
-  font-size: 0.8rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
   color: var(--d-accent);
   letter-spacing: 0.02em;
 }
@@ -127,11 +132,11 @@
   background: var(--d-accent);
   color: #fff;
   border: 1px solid var(--d-accent-bright);
-  font-family: var(--d-font-mono);
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-xs);
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   padding: 6px 14px;
   border-radius: 3px;
   cursor: pointer;
@@ -174,22 +179,23 @@
 }
 
 .targetCategory {
-  font-family: var(--d-font-mono);
-  font-size: 0.7rem;
-  font-weight: 700;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-xs);
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--d-accent-bright);
 }
 
 .targetTime {
-  font-size: 0.7rem;
+  font-size: var(--d-text-xs);
   font-family: var(--d-font-mono);
   color: var(--d-text-muted);
 }
 
 .targetDesc {
-  font-size: 0.8rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
   color: var(--d-text-secondary);
   line-height: 1.4;
 }
@@ -199,10 +205,11 @@
   background: transparent;
   color: var(--d-text-muted);
   border: 1px solid var(--d-border-subtle);
-  font-family: var(--d-font-mono);
-  font-size: 0.65rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-2xs);
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   padding: 3px 8px;
   border-radius: 2px;
   cursor: pointer;
@@ -227,11 +234,11 @@
 }
 
 .habitsTitle {
-  font-family: var(--d-font-mono);
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-xs);
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   color: var(--d-text-primary);
 }
 
@@ -251,7 +258,8 @@
   display: flex;
   align-items: center;
   gap: var(--d-space-2);
-  font-size: 0.8rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
   color: var(--d-text-secondary);
   cursor: pointer;
   user-select: none;
@@ -271,7 +279,8 @@
   background: rgba(196, 168, 130, 0.05);
   border-left: 3px solid var(--d-accent);
   padding: var(--d-space-3);
-  font-size: 0.8rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
   font-style: italic;
   color: var(--d-text-secondary);
   line-height: 1.4;
@@ -279,10 +288,12 @@
 }
 
 .promptLabel {
-  font-family: var(--d-font-mono);
-  font-size: 0.65rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-2xs);
+  font-weight: 600;
   font-style: normal;
   text-transform: uppercase;
+  letter-spacing: 0.12em;
   color: var(--d-accent-bright);
   display: block;
   margin-bottom: 2px;
@@ -326,9 +337,9 @@
   display: flex;
   align-items: center;
   gap: var(--d-space-2);
-  font-family: var(--d-font-mono);
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
+  font-weight: 600;
   letter-spacing: 0.08em;
   color: var(--d-text-primary);
   text-transform: uppercase;
@@ -342,7 +353,7 @@
 
 .cardWeight {
   font-family: var(--d-font-mono);
-  font-size: 0.65rem;
+  font-size: var(--d-text-2xs);
   color: var(--d-accent);
   background: rgba(196, 168, 130, 0.08);
   border: 1px solid rgba(196, 168, 130, 0.2);
@@ -370,10 +381,11 @@
 }
 
 .fieldLabel {
-  font-size: 0.7rem;
-  font-family: var(--d-font-mono);
+  font-size: var(--d-text-2xs);
+  font-family: var(--d-font-sans);
+  font-weight: 600;
   color: var(--d-text-muted);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
@@ -383,7 +395,7 @@
   border-radius: var(--d-radius-sm);
   color: var(--d-text-primary);
   font-family: var(--d-font-mono);
-  font-size: 0.875rem;
+  font-size: var(--d-text-base);
   padding: var(--d-space-2) var(--d-space-3);
   outline: none;
   transition: border-color var(--d-duration-fast) var(--d-ease-smooth);
@@ -403,7 +415,8 @@
   display: flex;
   align-items: center;
   gap: var(--d-space-2);
-  font-size: 0.75rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
   color: var(--d-text-secondary);
   cursor: pointer;
 }
@@ -417,8 +430,8 @@
   border: 1px solid var(--d-border-subtle);
   border-radius: var(--d-radius-sm);
   color: var(--d-text-primary);
-  font-family: inherit;
-  font-size: 0.875rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
   padding: var(--d-space-3);
   resize: vertical;
   min-height: 80px;
@@ -431,7 +444,7 @@
 }
 
 .charCount {
-  font-size: 0.65rem;
+  font-size: var(--d-text-2xs);
   color: var(--d-text-muted);
   font-family: var(--d-font-mono);
   text-align: right;
@@ -449,7 +462,7 @@
   border-radius: var(--d-radius-sm);
   color: var(--d-text-muted);
   font-family: var(--d-font-mono);
-  font-size: 0.8rem;
+  font-size: var(--d-text-sm);
   padding: var(--d-space-2);
   cursor: pointer;
   transition: all var(--d-duration-fast) var(--d-ease-smooth);
@@ -472,11 +485,11 @@
   background: var(--d-accent);
   color: #fff;
   border: 1px solid var(--d-accent-bright);
-  font-family: var(--d-font-mono);
-  font-size: 0.875rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-xs);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.16em;
   padding: var(--d-space-3) var(--d-space-6);
   border-radius: var(--d-radius-md);
   cursor: pointer;
@@ -517,15 +530,17 @@
 }
 
 .emptyTitle {
-  font-family: var(--d-font-mono);
-  font-size: 1rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-md);
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--d-text-secondary);
 }
 
 .emptySubtitle {
-  font-size: 0.8rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
   max-width: 340px;
   line-height: 1.5;
 }
@@ -538,7 +553,8 @@
   display: flex;
   align-items: center;
   gap: var(--d-space-2);
-  font-family: var(--d-font-mono);
-  font-size: 0.75rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-xs);
+  letter-spacing: 0.05em;
   color: var(--d-danger, #ef4444);
 }

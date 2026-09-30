@@ -18,15 +18,16 @@
 }
 
 .sectionTitle {
-  font-size: 0.65rem;
-  letter-spacing: 0.22em;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.16em;
   color: var(--d-text-muted);
   text-transform: uppercase;
   display: flex;
   align-items: center;
   gap: var(--d-space-3);
   margin: 0;
-  font-family: var(--d-font-mono);
 }
 
 .phaseFilterBar {
@@ -42,9 +43,10 @@
   background: transparent;
   border: none;
   color: var(--d-text-muted);
-  font-family: var(--d-font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.06em;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.12em;
   padding: 4px 10px;
   border-radius: 2px;
   cursor: pointer;
@@ -142,7 +144,7 @@
   position: relative;
   z-index: 1;
   font-family: var(--d-font-mono);
-  font-size: 0.7rem;
+  font-size: var(--d-text-xs);
   color: var(--d-text-secondary);
 }
 
@@ -165,9 +167,9 @@
   display: flex;
   align-items: center;
   gap: var(--d-space-2);
-  font-size: 0.65rem;
+  font-size: var(--d-text-xs);
   color: var(--d-text-muted);
-  font-family: var(--d-font-mono);
+  font-family: var(--d-font-sans);
 }
 
 .legendDot {

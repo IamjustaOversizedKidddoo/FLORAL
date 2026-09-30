@@ -20,16 +20,18 @@
 }
 
 .pageTitle {
-  font-size: 0.7rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-2xs);
   font-weight: 700;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.16em;
   color: var(--d-text-secondary);
   text-transform: uppercase;
   margin-bottom: var(--d-space-2);
 }
 
 .pageSubtitle {
-  font-size: 0.8rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
   color: var(--d-text-muted);
   letter-spacing: 0.04em;
 }
@@ -82,15 +84,17 @@
 }
 
 .phaseName {
-  font-size: 0.75rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
   font-weight: 700;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
   color: var(--d-text-hero);
   text-transform: uppercase;
 }
 
 .phaseDays {
-  font-size: 0.6rem;
+  font-family: var(--d-font-mono);
+  font-size: var(--d-text-2xs);
   color: var(--d-text-muted);
   letter-spacing: 0.12em;
   margin-top: 2px;
@@ -99,9 +103,10 @@
 .activePill {
   padding: 3px 10px;
   border-radius: 2px;
-  font-size: 0.55rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-2xs);
   font-weight: 700;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--phase-accent, var(--d-accent));
   background: color-mix(in srgb, var(--phase-accent) 14%, transparent);
@@ -111,9 +116,10 @@
 .pastPill {
   padding: 3px 10px;
   border-radius: 2px;
-  font-size: 0.55rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-2xs);
   font-weight: 700;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--d-success);
   background: var(--d-success-dim);
@@ -123,7 +129,8 @@
 /* Phase description */
 .phaseDesc {
   padding: var(--d-space-4) var(--d-space-6);
-  font-size: 0.8rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-sm);
   color: var(--d-text-secondary);
   line-height: 1.7;
   border-bottom: 1px solid var(--d-border-subtle);
@@ -155,9 +162,10 @@
   display: flex;
   align-items: center;
   gap: var(--d-space-2);
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.16em;
   color: var(--d-text-secondary);
   text-transform: uppercase;
   margin-bottom: var(--d-space-3);
@@ -182,7 +190,8 @@
 .phaseSectionItem {
   display: flex;
   gap: var(--d-space-2);
-  font-size: 0.72rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-xs);
   color: var(--d-text-secondary);
   line-height: 1.5;
 }
@@ -191,7 +200,7 @@
   color: var(--d-text-muted);
   flex-shrink: 0;
   margin-top: 1px;
-  font-size: 0.65rem;
+  font-size: var(--d-text-2xs);
 }
 
 /* Milestones */
@@ -202,9 +211,10 @@
 }
 
 .milestonesTitle {
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.16em;
   color: var(--d-text-muted);
   text-transform: uppercase;
   margin-bottom: var(--d-space-3);
@@ -220,7 +230,8 @@
   display: flex;
   align-items: center;
   gap: var(--d-space-2);
-  font-size: 0.7rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-xs);
   color: var(--d-text-secondary);
 }
 
@@ -241,9 +252,10 @@
 }
 
 .sectionTitle {
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.16em;
   color: var(--d-text-muted);
   text-transform: uppercase;
   margin-bottom: var(--d-space-4);
@@ -268,16 +280,18 @@
 }
 
 .readingCat {
-  font-size: 0.55rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.16em;
   color: var(--d-accent);
   text-transform: uppercase;
   margin-bottom: var(--d-space-1);
 }
 
 .readingTitle {
-  font-size: 0.75rem;
+  font-family: var(--d-font-sans);
+  font-size: var(--d-text-xs);
   color: var(--d-text-secondary);
   line-height: 1.4;
 }
