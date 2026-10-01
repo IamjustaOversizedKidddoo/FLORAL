@@ -775,3 +775,229 @@
   color: #FFE0B2;
 }
 
+/* ---- Commando Daily Orders Roster ---- */
+.taskRosterCard {
+  border: 1px solid rgba(196, 168, 130, 0.3);
+  border-radius: var(--d-radius-lg, 8px);
+  background: linear-gradient(180deg, rgba(22, 20, 17, 0.95) 0%, rgba(13, 14, 16, 0.98) 100%);
+  padding: var(--d-space-4, 16px) var(--d-space-5, 20px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-space-4, 16px);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+}
+
+.rosterHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(196, 168, 130, 0.15);
+}
+
+.rosterHeaderLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rosterBadge {
+  font-family: var(--d-font-heading, monospace);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: #C4A882;
+  text-transform: uppercase;
+}
+
+.rosterHeading {
+  font-family: var(--d-font-heading, monospace);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #F0EBE0;
+  margin: 0;
+  letter-spacing: 0.04em;
+}
+
+.rosterProgressBox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  min-width: 170px;
+}
+
+.rosterProgressText {
+  font-family: var(--d-font-heading, monospace);
+  font-size: 0.75rem;
+  color: #8C8270;
+  letter-spacing: 0.08em;
+}
+
+.rosterCountHighlight {
+  color: #C4A882;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.rosterProgressBar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.rosterProgressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #81C784 0%, #C4A882 100%);
+  transition: width 0.3s ease;
+}
+
+.rosterGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rosterItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 14px;
+  background: rgba(30, 27, 23, 0.55);
+  border: 1px solid rgba(196, 168, 130, 0.14);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.rosterItem:hover {
+  background: rgba(36, 32, 27, 0.8);
+  border-color: rgba(196, 168, 130, 0.3);
+}
+
+.rosterItemDone {
+  border-color: rgba(129, 199, 132, 0.3);
+  background: rgba(20, 32, 22, 0.45);
+}
+
+.rosterItemLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.rosterItemIcon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+.rosterItemMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rosterItemCategory {
+  font-family: var(--d-font-heading, monospace);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #9B8364;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.rosterItemTitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #F0EBE0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rosterItemDetail {
+  font-size: 0.75rem;
+  color: #8C8270;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rosterItemRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.statusBadgeDone {
+  font-family: var(--d-font-heading, monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #81C784;
+  background: rgba(129, 199, 132, 0.15);
+  border: 1px solid rgba(129, 199, 132, 0.4);
+  padding: 3px 8px;
+  border-radius: 3px;
+  letter-spacing: 0.08em;
+}
+
+.statusBadgePending {
+  font-family: var(--d-font-heading, monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #C4A882;
+  background: rgba(196, 168, 130, 0.1);
+  border: 1px solid rgba(196, 168, 130, 0.25);
+  padding: 3px 8px;
+  border-radius: 3px;
+  letter-spacing: 0.08em;
+}
+
+.rosterActionBtn {
+  font-family: var(--d-font-sans, sans-serif);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #F0EBE0;
+  background: rgba(196, 168, 130, 0.15);
+  border: 1px solid rgba(196, 168, 130, 0.35);
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.rosterActionBtn:hover {
+  background: rgba(196, 168, 130, 0.3);
+  border-color: #C4A882;
+  color: #FFFFFF;
+}
+
+@media (max-width: 640px) {
+  .rosterItem {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .rosterItemRight {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 6px;
+  }
+}
+
+

@@ -13,6 +13,7 @@ import type {
   DailyReflection,
   MoodRating,
   PhysicalLog,
+  StudySession,
 } from '../../types';
 import { getMissionForDay } from '../../data/curriculumData';
 import { PhaseBadge } from '../PhaseBadge/PhaseBadge';
@@ -193,6 +194,99 @@ export function DayDetail({
     [isDisabled, entry, onUpdate],
   );
 
+  const handleMarkStudyCompleted = useCallback(() => {
+    if (isDisabled) return;
+    const studySession: StudySession = {
+      subject: mission.studyTask.subject,
+      durationMin: mission.studyTask.durationMin,
+      topicsCovered: mission.studyTask.topic,
+    };
+    onUpdate({
+      studies: [...(entry?.studies || []), studySession],
+    });
+  }, [isDisabled, mission, entry, onUpdate]);
+
+  // Commando Daily Task Manifest Status
+  const taskRoster = useMemo(() => {
+    const isDoctrineDone = entry?.lessonSubmission?.isQuizPassed ?? false;
+    const isPtDone =
+      (entry?.physicalLog?.safetyConfirmed ?? false) ||
+      Boolean(entry?.pt?.runDistanceKm || entry?.pt?.pushUps || entry?.pt?.runTimeMin);
+    const isMentalDone = entry?.mentalSubmission?.isCompleted ?? false;
+    const isSsbDone = entry?.ssbSubmission?.isCompleted ?? false;
+    const isStudyDone =
+      (entry?.studies?.length ?? 0) > 0 ||
+      (entry?.chronosFocusMinutes ?? 0) >= (mission.studyTask.durationMin || 30);
+    const isHabitsDone =
+      (entry?.routineHabitsCompleted?.length ?? 0) >= Math.min(3, mission.routineHabits.length || 3);
+
+    const tasks = [
+      {
+        id: 'DOCTRINE',
+        step: 'LEARN' as TrainingCycleStep,
+        category: 'MILITARY DOCTRINE',
+        icon: '📖',
+        title: mission.learningLesson.title,
+        detail: `Domain: ${mission.learningLesson.domain} • Practical drill & verification quiz`,
+        isDone: isDoctrineDone,
+        actionLabel: isDoctrineDone ? 'Review Lesson' : 'Execute Lesson & Quiz',
+      },
+      {
+        id: 'PT',
+        step: 'PRACTISE' as TrainingCycleStep,
+        category: 'PHYSICAL CONDITIONING',
+        icon: '🏋️‍♂️',
+        title: mission.physicalTraining.title,
+        detail: `${mission.physicalTraining.prescription}`,
+        isDone: isPtDone,
+        actionLabel: isPtDone ? 'View Log' : 'Log Physical Training',
+      },
+      {
+        id: 'MENTAL',
+        step: 'PERFORM' as TrainingCycleStep,
+        category: 'COGNITIVE RESILIENCE',
+        icon: '🧠',
+        title: mission.mentalChallenge.title,
+        detail: `${mission.mentalChallenge.type} drill • ${mission.mentalChallenge.timeLimitSec}s limit`,
+        isDone: isMentalDone,
+        actionLabel: isMentalDone ? 'View Solution' : 'Solve Scenario',
+      },
+      {
+        id: 'SSB',
+        step: 'PERFORM' as TrainingCycleStep,
+        category: 'SSB OFFICER EVALUATION',
+        icon: '🎖️',
+        title: `${mission.ssbAssignment.activity}: ${mission.ssbAssignment.title}`,
+        detail: `Timed evaluation • ${mission.ssbAssignment.timeLimitMin} min standard`,
+        isDone: isSsbDone,
+        actionLabel: isSsbDone ? 'Review Evaluation' : 'Take SSB Drill',
+      },
+      {
+        id: 'STUDY',
+        step: 'IMPROVE' as TrainingCycleStep,
+        category: 'ACADEMIC SYLLABUS',
+        icon: '📚',
+        title: `${mission.studyTask.subject}: ${mission.studyTask.topic}`,
+        detail: `${mission.studyTask.durationMin} min target • NDA/CDS/AFCAT Syllabus`,
+        isDone: isStudyDone,
+        actionLabel: isStudyDone ? 'Study Completed' : 'Study Block',
+      },
+      {
+        id: 'HABITS',
+        step: 'IMPROVE' as TrainingCycleStep,
+        category: 'DISCIPLINE & REVEILLE',
+        icon: '🛡️',
+        title: 'Daily Commando Routine & Reveille',
+        detail: `${entry?.routineHabitsCompleted?.length ?? 0} of ${mission.routineHabits.length} field protocols verified`,
+        isDone: isHabitsDone,
+        actionLabel: isHabitsDone ? 'Habits Verified' : 'Check Field Protocols',
+      },
+    ];
+
+    const completedCount = tasks.filter((t) => t.isDone).length;
+    return { tasks, completedCount, totalCount: tasks.length };
+  }, [entry, mission]);
+
   return (
     <div className={styles.panel}>
       {/* Day & Mission Briefing Header */}
@@ -234,6 +328,60 @@ export function DayDetail({
 
         <div style={{ fontSize: '0.85rem', color: '#C4A882', lineHeight: '1.4' }}>
           <strong>Operational Objective:</strong> {mission.objective}
+        </div>
+      </div>
+
+      {/* Commando Order of the Day: Actionable Daily Tasks Roster */}
+      <div className={styles.taskRosterCard}>
+        <div className={styles.rosterHeader}>
+          <div className={styles.rosterHeaderLeft}>
+            <span className={styles.rosterBadge}>COMMANDO ORDER OF THE DAY</span>
+            <h3 className={styles.rosterHeading}>Day {dayNumber} Operational Mission Manifest</h3>
+          </div>
+          <div className={styles.rosterProgressBox}>
+            <div className={styles.rosterProgressText}>
+              <span className={styles.rosterCountHighlight}>
+                {taskRoster.completedCount} / {taskRoster.totalCount}
+              </span>{' '}
+              MISSIONS VERIFIED
+            </div>
+            <div className={styles.rosterProgressBar}>
+              <div
+                className={styles.rosterProgressFill}
+                style={{ width: `${(taskRoster.completedCount / taskRoster.totalCount) * 100}%` }}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.rosterGrid}>
+          {taskRoster.tasks.map((task) => (
+            <div
+              key={task.id}
+              className={`${styles.rosterItem} ${task.isDone ? styles.rosterItemDone : ''}`}
+            >
+              <div className={styles.rosterItemLeft}>
+                <div className={styles.rosterItemIcon}>{task.icon}</div>
+                <div className={styles.rosterItemMeta}>
+                  <div className={styles.rosterItemCategory}>{task.category}</div>
+                  <div className={styles.rosterItemTitle}>{task.title}</div>
+                  <div className={styles.rosterItemDetail}>{task.detail}</div>
+                </div>
+              </div>
+              <div className={styles.rosterItemRight}>
+                <span className={task.isDone ? styles.statusBadgeDone : styles.statusBadgePending}>
+                  {task.isDone ? '✓ VERIFIED' : 'PENDING'}
+                </span>
+                <button
+                  type="button"
+                  className={styles.rosterActionBtn}
+                  onClick={() => setActiveCycleStep(task.step)}
+                >
+                  {task.actionLabel} →
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -711,23 +859,35 @@ export function DayDetail({
                 {mission.studyTask.syllabusObjective}
               </div>
 
-              {onLaunchFocusSession && (
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '6px' }}>
                 <button
                   type="button"
-                  className={styles.filterBtn}
-                  style={{ alignSelf: 'flex-start', borderColor: '#C4A882', color: '#F0EBE0', marginTop: '6px' }}
-                  onClick={() =>
-                    onLaunchFocusSession({
-                      task: mission.studyTask.topic,
-                      subject: mission.studyTask.subject,
-                      dayNumber,
-                      createdAt: Date.now(),
-                    })
-                  }
+                  className={styles.saveBtn}
+                  style={{ fontSize: '0.8rem', padding: '6px 14px' }}
+                  onClick={handleMarkStudyCompleted}
+                  disabled={isDisabled}
                 >
-                  ⏱️ Launch {mission.studyTask.durationMin}m Study Timer in CHRONOS
+                  ✓ Mark {mission.studyTask.durationMin}m Study Completed
                 </button>
-              )}
+
+                {onLaunchFocusSession && (
+                  <button
+                    type="button"
+                    className={styles.filterBtn}
+                    style={{ borderColor: '#C4A882', color: '#F0EBE0' }}
+                    onClick={() =>
+                      onLaunchFocusSession({
+                        task: mission.studyTask.topic,
+                        subject: mission.studyTask.subject,
+                        dayNumber,
+                        createdAt: Date.now(),
+                      })
+                    }
+                  >
+                    ⏱️ Launch {mission.studyTask.durationMin}m Study Timer in CHRONOS
+                  </button>
+                )}
+              </div>
             </div>
           </div>
 
