@@ -287,6 +287,19 @@ export function DayDetail({
     return { tasks, completedCount, totalCount: tasks.length };
   }, [entry, mission]);
 
+  const handleToggleDayComplete = useCallback(() => {
+    if (isDisabled) return;
+    const isCurrentlyComplete = entry?.status === 'COMPLETE';
+    if (isCurrentlyComplete) {
+      onUpdate({ status: score >= 40 ? 'PARTIAL' : 'ACTIVE' });
+    } else {
+      onUpdate({
+        status: 'COMPLETE',
+        completionScore: Math.max(score, 100),
+      });
+    }
+  }, [isDisabled, entry, score, onUpdate]);
+
   return (
     <div className={styles.panel}>
       {/* Day & Mission Briefing Header */}
@@ -297,11 +310,34 @@ export function DayDetail({
           <PhaseBadge dayNumber={dayNumber} />
         </div>
 
-        <div className={styles.scoreRing}>
-          <div className={styles.scoreLabel}>EVALUATION SCORE</div>
-          <div style={{ fontFamily: 'var(--d-font-heading, monospace)', fontSize: '1.25rem', color: score >= 75 ? '#81C784' : '#C4A882' }}>
-            {score}%
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div className={styles.scoreRing}>
+            <div className={styles.scoreLabel}>EVALUATION SCORE</div>
+            <div
+              style={{
+                fontFamily: 'var(--d-font-heading, monospace)',
+                fontSize: '1.25rem',
+                color: score >= 75 ? '#81C784' : '#C4A882',
+              }}
+            >
+              {score}%
+            </div>
           </div>
+
+          <button
+            type="button"
+            className={entry?.status === 'COMPLETE' ? styles.statusBadgeDone : styles.saveBtn}
+            style={{
+              padding: '8px 14px',
+              fontSize: '0.78rem',
+              cursor: isDisabled ? 'not-allowed' : 'pointer',
+              whiteSpace: 'nowrap',
+            }}
+            onClick={handleToggleDayComplete}
+            disabled={isDisabled}
+          >
+            {entry?.status === 'COMPLETE' ? '✓ DAY COMPLETED' : '✓ MARK DAY COMPLETE'}
+          </button>
         </div>
       </div>
 

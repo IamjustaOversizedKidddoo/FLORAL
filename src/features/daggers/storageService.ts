@@ -59,8 +59,10 @@ export function todayDayNumber(startDate: string): number {
 export function computeCompletionScore(entry: DayEntry): number {
   let score = 0;
 
-  // PT pillar
-  if (entry.pt) {
+  // PT pillar (35%)
+  if (entry.physicalLog?.safetyConfirmed) {
+    score += SCORE_WEIGHTS.PT;
+  } else if (entry.pt) {
     const ptFields = [
       entry.pt.runDistanceKm,
       entry.pt.pushUps,
@@ -71,26 +73,37 @@ export function computeCompletionScore(entry: DayEntry): number {
     else if (ptFields.length === 1) score += SCORE_WEIGHTS.PT * 0.5;
   }
 
-  // SSB pillar
-  if (entry.ssb && entry.ssb.activities.length > 0) {
+  // SSB pillar (30%)
+  if (entry.ssbSubmission?.isCompleted) {
+    score += SCORE_WEIGHTS.SSB;
+  } else if (entry.ssb && entry.ssb.activities.length > 0) {
     const ssbMinutes = entry.ssb.durationMin ?? 0;
     if (ssbMinutes >= 60) score += SCORE_WEIGHTS.SSB;
     else if (ssbMinutes > 0) score += SCORE_WEIGHTS.SSB * (ssbMinutes / 60);
     else score += SCORE_WEIGHTS.SSB * 0.5; // Activity logged without duration
   }
 
-  // Studies pillar
+  // Studies pillar (20%)
   if (entry.studies && entry.studies.length > 0) {
     const totalStudyMin = entry.studies.reduce((sum, s) => sum + (s.durationMin ?? 0), 0);
     if (totalStudyMin >= 120) score += SCORE_WEIGHTS.STUDIES;
     else if (totalStudyMin > 0) score += SCORE_WEIGHTS.STUDIES * (totalStudyMin / 120);
+  } else if (entry.lessonSubmission?.isQuizPassed || entry.mentalSubmission?.isCompleted) {
+    let academyStudies = 0;
+    if (entry.lessonSubmission?.isQuizPassed) academyStudies += SCORE_WEIGHTS.STUDIES * 0.6;
+    if (entry.mentalSubmission?.isCompleted) academyStudies += SCORE_WEIGHTS.STUDIES * 0.4;
+    score += Math.min(SCORE_WEIGHTS.STUDIES, academyStudies);
+  } else if ((entry.chronosFocusMinutes ?? 0) >= 30) {
+    score += SCORE_WEIGHTS.STUDIES * 0.5;
   }
 
-  // Reflection pillar
+  // Reflection pillar (15%)
   if (entry.reflection && entry.reflection.text.trim().length >= 20) {
     score += SCORE_WEIGHTS.REFLECTION;
   } else if (entry.routineHabitsCompleted && entry.routineHabitsCompleted.length >= 3) {
     // If routine habits are recorded with at least 3 items, grant discipline bonus
+    score += SCORE_WEIGHTS.REFLECTION * 0.8;
+  } else if (entry.routineHabitsCompleted && entry.routineHabitsCompleted.length > 0) {
     score += SCORE_WEIGHTS.REFLECTION * 0.5;
   }
 
@@ -233,13 +246,22 @@ export function updateDayEntry(
       dayNumber,
       lastModified: Date.now(),
     };
-    updated.completionScore = computeCompletionScore(updated);
-    updated.status =
-      updated.completionScore >= 85
-        ? 'COMPLETE'
-        : updated.completionScore > 0
-          ? 'PARTIAL'
-          : d.status;
+    const computedScore = computeCompletionScore(updated);
+    updated.completionScore =
+      patch.completionScore !== undefined
+        ? Math.max(patch.completionScore, computedScore)
+        : computedScore;
+
+    if (patch.status) {
+      updated.status = patch.status;
+    } else {
+      updated.status =
+        updated.completionScore >= 75
+          ? 'COMPLETE'
+          : updated.completionScore > 0
+            ? 'PARTIAL'
+            : d.status;
+    }
     return updated;
   });
 
